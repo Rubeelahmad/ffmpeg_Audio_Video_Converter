@@ -1,13 +1,11 @@
 import React from "react";
+import { useHistory } from "react-router";
 
 function ConverterButton(props) {
+    const history = useHistory();
     const handleClick = (e) => {
-        console.log("Data:::::::: ", e.target.value);
-        console.log("Data:::::::: ", props.history);
-        // props.history.push("/converter")
+        history.push(`/convert/${e.target.value}`)
     }
-
-    console.log("Data::::::::: ")
     
     return(
         <div>

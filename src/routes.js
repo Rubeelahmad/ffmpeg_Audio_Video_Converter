@@ -8,7 +8,7 @@ const Converter = React.lazy(() => import('./views/home/Converter'));
 
 const routes = [
     { path: '/', exact: true, name: 'Home', component: Home },
-    { path: '/converter', name: 'Converter', component: Converter, exact: true },
+    { path: '/convert/:type', name: 'Converter', component: Converter, exact: true },
     //   { path: '/bulk-delete', name: 'Bulk Delete', component: BulkDelete },
 ];
 
