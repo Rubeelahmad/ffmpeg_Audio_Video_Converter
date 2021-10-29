@@ -1,69 +1,20 @@
-import React, { useCallback, useMemo } from 'react';
-import { useDropzone } from 'react-dropzone';
-
-const baseStyle = {
-    flex: 1,
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    padding: '20px',
-    borderWidth: 2,
-    borderRadius: 2,
-    borderColor: '#eeeeee',
-    borderStyle: 'dashed',
-    backgroundColor: '#fafafa',
-    color: '#bdbdbd',
-    outline: 'none',
-    transition: 'border .24s ease-in-out'
-};
-
-const activeStyle = {
-    borderColor: '#2196f3'
-};
-
-const acceptStyle = {
-    borderColor: '#00e676'
-};
-
-const rejectStyle = {
-    borderColor: '#ff1744'
-};
-
+import React, { useCallback, useMemo, useState } from 'react';
+import { useHistory, useParams } from 'react-router';
+import DropzoneArea from './Dropzone-area';
 
 function Converter(props) {
-
-    const {
-        getRootProps,
-        getInputProps,
-        open,
-        isDragActive,
-        isDragAccept,
-        isDragReject
-    } = useDropzone({
-        accept: 'image/*', noClick: true,
-        noKeyboard: true
-    });
-
-    const style = useMemo(() => ({
-        ...baseStyle,
-        ...(isDragActive ? activeStyle : {}),
-        ...(isDragAccept ? acceptStyle : {}),
-        ...(isDragReject ? rejectStyle : {})
-    }), [
-        isDragActive,
-        isDragReject,
-        isDragAccept
-    ]);
+    const { type } = useParams();
+    const [converterType, setConvertType] = useState(type.split("-")[0]);
 
     return (
         <>
             <div className="container">
-                <div {...getRootProps({ style })}>
-                    <input {...getInputProps()} />
-                    <p>Drag 'n' drop some files here, or click to select files</p>
-                    <button type="button" onClick={open}>
-                        Open File Dialog
-                    </button>
+                <div className="text-center mt-5">
+                    <h1><span className="text-uppercase">{converterType}</span> Converter</h1>
+                    <h6 className="lead">Convert your files to and from <span className="text-uppercase">{converterType}</span>, for free</h6>
+                </div>
+                <div className="mt-4 mb-4">
+                    <DropzoneArea />
                 </div>
             </div>
         </>

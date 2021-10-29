@@ -4,7 +4,7 @@ import { useHistory } from "react-router";
 function ConverterButton(props) {
     const history = useHistory();
     const handleClick = (e) => {
-        history.push(`/convert/${e.target.value}`)
+        history.push(`/${e.target.value}`)
     }
     
     return(
