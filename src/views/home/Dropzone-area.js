@@ -61,9 +61,23 @@ function DropzoneArea(props) {
                 <div {...getRootProps({ style })}>
                     <input {...getInputProps()} />
                     <p>Drag 'n' drop some files here, or click to select files</p>
-                    <button type="button" className="btn btn-success p-4" onClick={open}>
+                    <div className="btn-group">
+                        <button class="btn btn-success btn-lg" type="button">
+                            Large split button
+                        </button>
+                        <button type="button" class="btn btn-lg btn-success dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="sr-only"></span>
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="#">Action</a>
+                            <a class="dropdown-item" href="#">Another action</a>
+                            <a class="dropdown-item" href="#">Something else here</a>
+                        </div>
+                    </div>
+
+                    {/* <button type="button" className="btn btn-success p-4" onClick={open}>
                         Open File Dialog
-                    </button>
+                    </button> */}
                 </div>
             </div>
         </>
