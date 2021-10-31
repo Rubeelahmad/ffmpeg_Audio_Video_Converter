@@ -1,5 +1,5 @@
-import React, { useCallback, useMemo, useState } from 'react';
-import { useHistory, useParams } from 'react-router';
+import React, { useState } from 'react';
+import { useParams } from 'react-router';
 import DropzoneArea from './Dropzone-area';
 
 function Converter(props) {

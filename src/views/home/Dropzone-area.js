@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo } from 'react';
 import { useDropzone } from 'react-dropzone';
+import FFMPEG from "react-ffmpeg";
 
 const baseStyle = {
     flex: 1,
@@ -40,8 +41,7 @@ function DropzoneArea(props) {
         isDragAccept,
         isDragReject
     } = useDropzone({
-        accept: 'image/*', noClick: true,
-        noKeyboard: true
+        // accept: 'image/*',
     });
 
     const style = useMemo(() => ({
@@ -55,29 +55,42 @@ function DropzoneArea(props) {
         isDragAccept
     ]);
 
+    const fileHandleChange = async (e) => {
+        console.log("E:::::: ", e.target.files[0]);
+        const file = e.target.files[0];
+        await FFMPEG.process(
+            file,
+            '-metadata location="" -metadata location-eng="" -metadata author="" -c:v copy -c:webm copy',
+            function (e) {
+                const video = e.result;
+                console.log("video:::::::: ", e);
+            }
+        );
+    }
+
     return (
         <>
             <div className="container">
-                <div {...getRootProps({ style })}>
+                <div {...getRootProps({ style })} onChange={fileHandleChange}>
                     <input {...getInputProps()} />
                     <p>Drag 'n' drop some files here, or click to select files</p>
-                    <div className="btn-group">
-                        <button class="btn btn-success btn-lg" type="button">
+                    {/* <div className="btn-group">
+                        <button className="btn btn-success btn-lg" type="button">
                             Large split button
                         </button>
-                        <button type="button" class="btn btn-lg btn-success dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="sr-only"></span>
+                        <button type="button" className="btn btn-lg btn-success dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span className="sr-only"></span>
                         </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" href="#">Action</a>
-                            <a class="dropdown-item" href="#">Another action</a>
-                            <a class="dropdown-item" href="#">Something else here</a>
+                        <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a className="dropdown-item" href="#">Action</a>
+                            <a className="dropdown-item" href="#">Another action</a>
+                            <a className="dropdown-item" href="#">Something else here</a>
                         </div>
-                    </div>
+                    </div> */}
 
-                    {/* <button type="button" className="btn btn-success p-4" onClick={open}>
+                    <button type="button" className="btn btn-success p-4" onClick={open}>
                         Open File Dialog
-                    </button> */}
+                    </button>
                 </div>
             </div>
         </>
