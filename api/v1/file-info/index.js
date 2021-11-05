@@ -6,7 +6,8 @@ const {auth, upload} = require('../../../middleware/auth');
 
 router.get('/', FileInfoController.getAllFiles);
 router.post('/file-upload', upload.single("file"), FileInfoController.fileUpload);
-router.post('/fluent-upload-file', upload.single("file"), FileInfoController.fluentFileUpload);
+router.post('/video-converter', upload.single("file"), FileInfoController.videoConverter);
+router.post('/audio-converter', upload.single("file"), FileInfoController.audioConverter);
 // router.get('/:id', auth.auth, UserController.getUserById)
 // router.get('/get-user-by-id', auth.auth, UserController.getUserById)
 // router.post('/', UserController.createUser)
