@@ -14,7 +14,7 @@ function Converter(props) {
                     <h6 className="lead">Convert your files to and from <span className="text-uppercase">{converterType}</span>, for free</h6>
                 </div>
                 <div className="mt-4 mb-4">
-                    <DropzoneArea />
+                    <DropzoneArea converterType={converterType} />
                 </div>
             </div>
         </>

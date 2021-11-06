@@ -1,6 +1,7 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import FFMPEG from "react-ffmpeg";
+import { converterApi } from './api';
 
 const baseStyle = {
     flex: 1,
@@ -32,7 +33,8 @@ const rejectStyle = {
 
 
 function DropzoneArea(props) {
-
+    const [imageData, setImageData] = useState(null);
+    
     const {
         getRootProps,
         getInputProps,
@@ -56,16 +58,15 @@ function DropzoneArea(props) {
     ]);
 
     const fileHandleChange = async (e) => {
-        console.log("E:::::: ", e.target.files[0]);
         const file = e.target.files[0];
-        await FFMPEG.process(
-            file,
-            '-metadata location="" -metadata location-eng="" -metadata author="" -c:v copy -c:webm copy',
-            function (e) {
-                const video = e.result;
-                console.log("video:::::::: ", e);
-            }
-        );
+        setImageData(file);
+    }
+
+    const handleConvert = () => {
+        const body = {
+            file: imageData
+        };
+        converterApi(body, props.converterType)
     }
 
     return (
@@ -91,6 +92,16 @@ function DropzoneArea(props) {
                     <button type="button" className="btn btn-success p-4" onClick={open}>
                         Open File Dialog
                     </button>
+                </div>
+                <div className="mt-3 d-flex justify-content-center">
+                    {
+                        imageData ? (
+                            <button type="button" className="btn btn-info p-3" onClick={handleConvert}>
+                                Convert
+                            </button>
+                        ) : ''
+                    }
+
                 </div>
             </div>
         </>
