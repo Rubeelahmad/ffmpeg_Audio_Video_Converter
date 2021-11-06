@@ -1,16 +1,12 @@
 import { faCaretDown, faCaretUp, faFileVideo } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Videos } from './converter-file';
 import ConverterButton from './converter-button';
 
 function Video(props) {
     const [show, setShow] = useState(true);
 
-    /* const handleShow1 = () => {
-        setShow(!show);
-    }
- */
     const handleShow = useCallback(() => {
         return setShow(!show);
     }, [show])
@@ -18,7 +14,7 @@ function Video(props) {
     return (
         <>
             <div className="card">
-                <div className="card-header" style={{cursor: 'pointer'}} title={`${show? 'hide': 'show'}`} onClick={handleShow}>
+                <div className="card-header" style={{ cursor: 'pointer' }} title={`${show ? 'hide' : 'show'}`} onClick={handleShow}>
                     <div className="d-flex justify-content-between">
                         <h4><FontAwesomeIcon icon={faFileVideo} />&nbsp; <span className="text-danger">Video</span> Converter</h4>
                         {

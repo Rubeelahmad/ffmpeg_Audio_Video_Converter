@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useParams } from 'react-router';
 import DropzoneArea from './Dropzone-area';
 
 function Converter(props) {
     const { type } = useParams();
-    const [converterType, setConvertType] = useState(type.split("-")[0]);
+    const converterType = type.split("-")[0];
 
     return (
         <>

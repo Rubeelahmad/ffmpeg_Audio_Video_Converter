@@ -1,7 +1,8 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
-import FFMPEG from "react-ffmpeg";
 import { converterApi } from './api';
+import Loader from '../components/loder';
+import { errorMessageAlert, successMessageAlert } from '../components/alert';
 
 const baseStyle = {
     flex: 1,
@@ -34,7 +35,8 @@ const rejectStyle = {
 
 function DropzoneArea(props) {
     const [imageData, setImageData] = useState(null);
-    
+    const [isLoaded, setIsLoaded] = useState(false);
+
     const {
         getRootProps,
         getInputProps,
@@ -62,11 +64,30 @@ function DropzoneArea(props) {
         setImageData(file);
     }
 
-    const handleConvert = () => {
+    const handleConvert = async () => {
+        setIsLoaded(true);
         const body = {
             file: imageData
         };
-        converterApi(body, props.converterType)
+        
+        try {
+            const response = await converterApi(body, props.converterType);
+            if(response?.code >= 200 || response?.code < 205) {
+                successMessageAlert(response.message) //Show alert after convert
+            } else {
+                errorMessageAlert();
+            }
+
+        } catch (error) {
+            console.error("Error::::::::: handle convert function", error);
+            errorMessageAlert();
+        } finally {
+            setIsLoaded(false);
+        }
+    }
+
+    if (isLoaded) {
+        return <Loader isLoaded={isLoaded} />
     }
 
     return (

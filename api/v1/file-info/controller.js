@@ -44,18 +44,20 @@ exports.fileUpload = async (req, res) => {
 
 exports.videoConverter = async (req, res) => {
     try {
+        const { to } = req.query;
+        console.log("To:::::::::::: ", to)
         var fileOriginalName = req.file.originalname;
         let fileNameWithoutExtension = fileOriginalName.substring(0, fileOriginalName.lastIndexOf('.'));
-        var fileName = `${fileNameWithoutExtension}.${req.query.to}`
+        var fileName = `${fileNameWithoutExtension}.${to}`
         ffmpeg(`public/images/${fileOriginalName}`)
-            // .videoCodec('libx264')
-            // .withSize('640x360')
-            // .videoBitrate('600k')
-            // .withAspectRatio('16:9')
-            // .withFpsOutput(25)
-            // .audioBitrate('90k')
-            // .addOptions(['-vprofile high', '-threads 0', '-movflags faststart'])
-            .withOutputFormat(req.query.to)
+            .videoCodec('libx264')
+            .withSize('640x360')
+            .videoBitrate('600k')
+            .withAspectRatio('16:9')
+            .withFpsOutput(25)
+            .audioBitrate('90k')
+            .addOptions(['-vprofile high', '-threads 0', '-movflags faststart'])
+            .withOutputFormat(to)
             // .noAudio()
             .on("start", function (cmdLine) {
                 console.log("Start.............", cmdLine);
@@ -64,7 +66,15 @@ exports.videoConverter = async (req, res) => {
                 console.log("Progresss:::::::: ", progress);
             })
             .on("end", function (stdout, stderr) {
-                console.log("Finished ", stdout);
+                // if (stderr) {
+                //     console.log("Error video converter end:::::::::", stderr);
+                //     const failure_500 = failure.failure_range_500.failure_500;
+                //     failure_500.items = stderr;
+                //     return res.status(failure_500.code).send(failure_500);
+                // }
+
+                /* Create video link */
+
                 // console.log("Finished error ", stderr);
                 /* res.download(__dirname + fileName, function (err) {
                     if (err) throw err;
@@ -78,17 +88,24 @@ exports.videoConverter = async (req, res) => {
                     if (err) throw err;
                     console.log("File deleted");
                 });
+                /* Return response */
+                const success_200 = success.success_range_200.success_200;
+                success_200.message = `Video converted successfully into ${to} format`;
+                success_200.items = [];
+                return res.status(success_200.code).send(success_200)
             }).on("error", function (err) {
                 console.log("an error happened: " + err.message);
                 /* fs.unlink(`public/images/1. Introduction.mp4`, function (err) {
                     if (err) throw err;
                     console.log("File deleted");
                 }); */
+                console.log("Error::::::::: ", err);
+                const failure_500 = failure.failure_range_500.failure_500;
+                failure_500.message = err.message;
+                failure_500.items = err.message;
+                return res.status(failure_500.code).send(failure_500);
             })
             .saveToFile(`public/images/${fileName}`);
-        const success_200 = success.success_range_200.success_200;
-        success_200.items = [];
-        return res.status(success_200.code).send(success_200)
 
     } catch (error) {
         console.log("Error::::::::: ", error);
@@ -100,9 +117,10 @@ exports.videoConverter = async (req, res) => {
 
 exports.audioConverter = async (req, res) => {
     try {
+        const { to } = req.query;
         var fileOriginalName = req.file.originalname;
         let fileNameWithoutExtension = fileOriginalName.substring(0, fileOriginalName.lastIndexOf('.'));
-        var fileName = `${fileNameWithoutExtension}.${req.query.to}`
+        var fileName = `${fileNameWithoutExtension}.${to}`
         ffmpeg(`public/images/${fileOriginalName}`)
             // .videoCodec('libx264')
             // .withSize('640x360')
@@ -111,7 +129,7 @@ exports.audioConverter = async (req, res) => {
             // .withFpsOutput(25)
             // .audioBitrate('90k')
             // .addOptions(['-vprofile high', '-threads 0', '-movflags faststart'])
-            .withOutputFormat(req.query.to)
+            .withOutputFormat(to)
             // .noAudio()
             .on("start", function (cmdLine) {
                 console.log("Start.............", cmdLine);
@@ -120,8 +138,13 @@ exports.audioConverter = async (req, res) => {
                 console.log("Progresss:::::::: ", progress);
             })
             .on("end", function (stdout, stderr) {
-                console.log("Finished ", stdout);
-                // console.log("Finished error ", stderr);
+                /* if (stderr) {
+                    console.log("Error video converter end::::::::", stderr);
+                    const failure_500 = failure.failure_range_500.failure_500;
+                    failure_500.items = stderr;
+                    return res.status(failure_500.code).send(failure_500);
+                } */
+
                 /* res.download(__dirname + fileName, function (err) {
                     if (err) throw err;
 
@@ -134,17 +157,24 @@ exports.audioConverter = async (req, res) => {
                     if (err) throw err;
                     console.log("File deleted");
                 });
+                /* Return response */
+                const success_200 = success.success_range_200.success_200;
+                success_200.message = `Video converted successfully into ${to} format`;
+                success_200.items = [];
+                return res.status(success_200.code).send(success_200)
             }).on("error", function (err) {
                 console.log("an error happened: " + err.message);
                 /* fs.unlink(`public/images/1. Introduction.mp4`, function (err) {
                     if (err) throw err;
                     console.log("File deleted");
                 }); */
+                console.log("Error::::::::: ", err);
+                const failure_500 = failure.failure_range_500.failure_500;
+                failure_500.message = err.message;
+                failure_500.items = err.message;
+                return res.status(failure_500.code).send(failure_500);
             })
             .saveToFile(`public/images/${fileName}`);
-        const success_200 = success.success_range_200.success_200;
-        success_200.items = [];
-        return res.status(success_200.code).send(success_200)
 
     } catch (error) {
         console.log("Error::::::::: ", error);
