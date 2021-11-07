@@ -15,18 +15,33 @@ export async function converterApi(body, type) {
         let response = {};
         let formData = new FormData();
         formData.append("file", body.file);
-        if (_.findIndex(Videos, function (video) { return video?.name?.toLowerCase() === type; }) > -1) {
+        const is_video_converter = _.find(Videos, function (video) { return video?.name.toLowerCase() === type.toLowerCase(); });
+        const is_audio_converter = _.find(Audios, function (audio) { return audio?.name.toLowerCase() === type.toLowerCase(); });
+        /* if (_.find(Videos, function (video) { return video?.name.toLowerCase() === type; })) {
             response = await API.post(`${BASE_API_URL}file-info/video-converter?to=${type}`, formData, config);
-        } else if ((_.findIndex(Audios, function (audio) { return audio?.name?.toLowerCase() === type; })) > -1) {
+        } else if ((_.find(Audios, function (audio) { return audio?.name.toLowerCase() === type; }))) {
             response = await API.post(`${BASE_API_URL}file-info/audio-converter?to=${type}`, formData, config);
         } else {
+            console.log("Data::::::::: else:::::");
             response.code = 400;
             response.message = `${type} is not supported`;
             response.items = [];
-        }
-        
+        } */
 
-        console.log("Response:::::::::::::::::::::::: ", response?.data);
+        if (is_video_converter) {
+            response = await API.post(`${BASE_API_URL}file-info/video-converter?to=${type}`, formData, config);
+        } else if (is_audio_converter) {
+            response = await API.post(`${BASE_API_URL}file-info/audio-converter?to=${type}`, formData, config);
+        } else {
+            console.log("Data::::::::: else:::::");
+            const obj = {
+                code: 400,
+                message: `${type} is not supported`,
+                items: [],
+            }
+            response.data = obj;
+        }
+
         return response?.data;
     } catch (error) {
         throw error;

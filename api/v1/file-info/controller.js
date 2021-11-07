@@ -45,18 +45,17 @@ exports.fileUpload = async (req, res) => {
 exports.videoConverter = async (req, res) => {
     try {
         const { to } = req.query;
-        console.log("To:::::::::::: ", to)
         var fileOriginalName = req.file.originalname;
         let fileNameWithoutExtension = fileOriginalName.substring(0, fileOriginalName.lastIndexOf('.'));
         var fileName = `${fileNameWithoutExtension}.${to}`
         ffmpeg(`public/images/${fileOriginalName}`)
-            .videoCodec('libx264')
-            .withSize('640x360')
-            .videoBitrate('600k')
-            .withAspectRatio('16:9')
-            .withFpsOutput(25)
-            .audioBitrate('90k')
-            .addOptions(['-vprofile high', '-threads 0', '-movflags faststart'])
+            // .videoCodec('libx264')
+            // .withSize('640x360')
+            // .videoBitrate('600k')
+            // .withAspectRatio('16:9')
+            // .withFpsOutput(25)
+            // .audioBitrate('90k')
+            // .addOptions(['-vprofile high', '-threads 0', '-movflags faststart'])
             .withOutputFormat(to)
             // .noAudio()
             .on("start", function (cmdLine) {
@@ -99,6 +98,10 @@ exports.videoConverter = async (req, res) => {
                     if (err) throw err;
                     console.log("File deleted");
                 }); */
+                fs.unlink(`public/images/${fileOriginalName}`, function (err) {
+                    if (err) throw err;
+                    console.log("File deleted");
+                });
                 console.log("Error::::::::: ", err);
                 const failure_500 = failure.failure_range_500.failure_500;
                 failure_500.message = err.message;
@@ -168,6 +171,10 @@ exports.audioConverter = async (req, res) => {
                     if (err) throw err;
                     console.log("File deleted");
                 }); */
+                fs.unlink(`public/images/${fileOriginalName}`, function (err) {
+                    if (err) throw err;
+                    console.log("File deleted");
+                });
                 console.log("Error::::::::: ", err);
                 const failure_500 = failure.failure_range_500.failure_500;
                 failure_500.message = err.message;
