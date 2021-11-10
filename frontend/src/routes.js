@@ -1,15 +1,13 @@
 import React from 'react';
-
-// const Breadcrumbs = React.lazy(() => import('./views/base/breadcrumbs/Breadcrumbs'));
-// const Cards = React.lazy(() => import('./views/base/cards/Cards'));
+import VideoCompressorUi from './views/video-compressor/video-compressor-ui';
 
 const Home = React.lazy(() => import('./views/home/Home'));
 const Converter = React.lazy(() => import('./views/home/Converter'));
 
 const routes = [
     { path: '/', exact: true, name: 'Home', component: Home },
+    { path: '/video-compressor', name: 'Video Compressor', component: VideoCompressorUi, exact: true },
     { path: '/:type', name: 'Converter', component: Converter, exact: true },
-    //   { path: '/bulk-delete', name: 'Bulk Delete', component: BulkDelete },
 ];
 
 export default routes;

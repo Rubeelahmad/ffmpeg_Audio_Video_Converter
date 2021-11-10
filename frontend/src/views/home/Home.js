@@ -1,6 +1,7 @@
 import React from 'react';
 import Music from '../components/music';
 import Video from '../components/video';
+import VideoCompressor from '../video-compressor/video-compressor';
 
 function Home() {
     return(
@@ -11,6 +12,9 @@ function Home() {
                 </div>
                 <div className="col-md-6 mt-5 mb-5">
                     <Music />
+                </div>
+                <div className="col-md-6 mt-5 mb-5">
+                    <VideoCompressor />
                 </div>
             </div>
         </>

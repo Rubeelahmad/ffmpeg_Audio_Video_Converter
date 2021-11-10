@@ -75,3 +75,10 @@ export const Audios = [
         path: "aac-converter"
     },
 ]
+
+export const VideoCompressorType = [
+    {
+        name: "Video Compressor",
+        path: "video-compressor"
+    },
+]
