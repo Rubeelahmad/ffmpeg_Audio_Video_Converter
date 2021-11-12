@@ -1,5 +1,5 @@
 import React from 'react';
-// import DropzoneArea from './Dropzone-area';
+import VideoCompressorForm from './compression-form';
 
 function VideoCompressorUi(props) {
 
@@ -10,9 +10,9 @@ function VideoCompressorUi(props) {
                     <h1><span className="text-uppercase">Video Compressor</span></h1>
                     <h6 className="lead">Compress your files for free</h6>
                 </div>
-                {/* <div className="mt-4 mb-4">
-                    <DropzoneArea converterType={converterType} />
-                </div> */}
+                <div className="mt-4 mb-4">
+                    <VideoCompressorForm />
+                </div>
             </div>
         </>
     )
