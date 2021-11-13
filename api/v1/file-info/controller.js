@@ -190,3 +190,134 @@ exports.audioConverter = async (req, res) => {
         return res.status(failure_500.code).send(failure_500);
     }
 }
+
+exports.videoCompress = async (req, res) => {
+    try {
+        const { codec, width, height, videoBitRate, audioBitrate } = req.body;
+        var fileOriginalName = req.file.originalname;
+        var fileName = `compressed-${fileOriginalName}`;
+        console.log("bodya::::::::::::::::: ", req.body)
+        // let fileNameWithoutExtension = fileOriginalName.substring(0, fileOriginalName.lastIndexOf('.'));
+        // var fileName = `${fileNameWithoutExtension}.${to}`
+        ffmpeg(`public/images/${fileOriginalName}`)
+            .audioCodec(`copy`)
+            .videoCodec(`libx${codec}`)
+            .withSize(`${width}x${height}`)
+            .withAspectRatio('16:9')
+            .withFpsOutput(25)
+            .audioBitrate(`${audioBitrate}`)
+            .videoBitrate(`${videoBitRate}`)
+            .addOptions(['-vprofile high', '-threads 0', '-movflags faststart'])
+            // .noVideo()
+        //     .withOutputFormat(to)
+            .noAudio()
+            .on("start", function (cmdLine) {
+                console.log("Start.............", cmdLine);
+            })
+            .on("progress", function (progress) {
+                console.log("Progresss:::::::: ", progress);
+            })
+            .on("end", function (stdout, stderr) {
+                /* if (stderr) {
+                    console.log("Error video converter end::::::::", stderr);
+                    const failure_500 = failure.failure_range_500.failure_500;
+                    failure_500.items = stderr;
+                    return res.status(failure_500.code).send(failure_500);
+                } */
+
+                /* res.download(__dirname + fileName, function (err) {
+                    if (err) throw err;
+
+                    fs.unlink(__dirname + fileName, function (err) {
+                        if (err) throw err;
+                        console.log("File deleted");
+                    });
+                }); */
+                fs.unlink(`public/images/${fileOriginalName}`, function (err) {
+                    if (err) throw err;
+                    console.log("File deleted");
+                });
+                /* Return response */
+                const success_200 = success.success_range_200.success_200;
+                success_200.message = `Video compressed successfully`;
+                success_200.items = [];
+                return res.status(success_200.code).send(success_200)
+            }).on("error", function (err) {
+                console.log("an error happened: " + err.message);
+                /* fs.unlink(`public/images/1. Introduction.mp4`, function (err) {
+                    if (err) throw err;
+                    console.log("File deleted");
+                }); */
+                fs.unlink(`public/images/${fileOriginalName}`, function (err) {
+                    if (err) throw err;
+                    console.log("File deleted");
+                });
+                console.log("Error::::::::: ", err);
+                const failure_500 = failure.failure_range_500.failure_500;
+                failure_500.message = err.message;
+                failure_500.items = err.message;
+                return res.status(failure_500.code).send(failure_500);
+            })
+            .saveToFile(`public/images/${fileName}`);
+
+    } catch (error) {
+        console.log("Error::::::::: ", error);
+        const failure_500 = failure.failure_range_500.failure_500;
+        failure_500.items = error;
+        return res.status(failure_500.code).send(failure_500);
+    }
+}
+
+exports.mp4ToMp3 = async (req, res) => {
+    try {
+        let audioBitrate = req.body.audioBitrate || '128k';
+        let audioCodec = req.body.audioCodec || 'libmp3lame';
+        let to = 'mp3';
+        var fileOriginalName = req.file.originalname;
+        let fileNameWithoutExtension = fileOriginalName.substring(0, fileOriginalName.lastIndexOf('.'));
+        var fileName = `${fileNameWithoutExtension}.${to}`
+        ffmpeg(`public/images/${fileOriginalName}`)
+            .audioCodec(`${audioCodec}`)
+            .audioBitrate(`${audioBitrate}`)
+            .withOutputFormat(to)
+            .on("start", function (cmdLine) {
+                console.log("Start.............", cmdLine);
+            })
+            .on("progress", function (progress) {
+                console.log("Progresss:::::::: ", progress);
+            })
+            .on("end", function (stdout, stderr) {
+                fs.unlink(`public/images/${fileOriginalName}`, function (err) {
+                    if (err) throw err;
+                    console.log("File deleted");
+                });
+                /* Return response */
+                const success_200 = success.success_range_200.success_200;
+                success_200.message = `Video converted successfully into ${to} format`;
+                success_200.items = [];
+                return res.status(success_200.code).send(success_200)
+            }).on("error", function (err) {
+                console.log("an error happened: " + err.message);
+                /* fs.unlink(`public/images/1. Introduction.mp4`, function (err) {
+                    if (err) throw err;
+                    console.log("File deleted");
+                }); */
+                fs.unlink(`public/images/${fileOriginalName}`, function (err) {
+                    if (err) throw err;
+                    console.log("File deleted");
+                });
+                console.log("Error::::::::: ", err);
+                const failure_500 = failure.failure_range_500.failure_500;
+                failure_500.message = err.message;
+                failure_500.items = err.message;
+                return res.status(failure_500.code).send(failure_500);
+            })
+            .saveToFile(`public/images/${fileName}`);
+
+    } catch (error) {
+        console.log("Error::::::::: ", error);
+        const failure_500 = failure.failure_range_500.failure_500;
+        failure_500.items = error;
+        return res.status(failure_500.code).send(failure_500);
+    }
+}
