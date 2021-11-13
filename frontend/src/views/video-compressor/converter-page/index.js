@@ -1,7 +1,8 @@
 import React from 'react';
-import VideoCompressorForm from './compression-form';
+import VideoCompressorForm from './video-compressor-dropzone-area';
 
-function VideoCompressorUi(props) {
+
+function VideoComressorUI(props) {
 
     return (
         <>
@@ -18,4 +19,4 @@ function VideoCompressorUi(props) {
     )
 }
 
-export default VideoCompressorUi;
+export default VideoComressorUI;

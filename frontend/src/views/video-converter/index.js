@@ -1,34 +1,33 @@
-import { faCaretDown, faCaretUp, faFileAudio } from '@fortawesome/free-solid-svg-icons';
+import { faCaretDown, faCaretUp, faFileVideo } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useState } from 'react';
-import { Audios } from './converter-file';
-import ConverterButton from './converter-button';
+import React, { useCallback, useState } from 'react';
+import { Videos } from '../components/converter-file';
+import VideoConverterButton from './button';
 
-function Music() {
-
+function VideoUI(props) {
     const [show, setShow] = useState(true);
 
-    const handleShow = () => {
-        setShow(!show);
-    }
+    const handleShow = useCallback(() => {
+        return setShow(!show);
+    }, [show])
 
     return (
         <>
             <div className="card">
                 <div className="card-header" style={{ cursor: 'pointer' }} title={`${show ? 'hide' : 'show'}`} onClick={handleShow}>
                     <div className="d-flex justify-content-between">
-                        <h4><FontAwesomeIcon icon={faFileAudio} />&nbsp; <span className="text-danger">Music</span> Converter</h4>
+                        <h4><FontAwesomeIcon icon={faFileVideo} />&nbsp; <span className="text-danger">Video</span> Converter</h4>
                         {
                             show ? (<h4><FontAwesomeIcon icon={faCaretUp} /></h4>) : (<h4><FontAwesomeIcon icon={faCaretDown} /></h4>)
                         }
                     </div>
                 </div>
-                <div className="card-body">
+                <div className={`card-body`}>
                     <div className={`d-flex flex-wrap ${show ? 'd-block' : 'd-none'}`}>
                         {
-                            Audios.map((audio, idx) => {
+                            Videos.map((video, idx) => {
                                 return (
-                                    <ConverterButton property={audio} key={idx} />
+                                    <VideoConverterButton property={video} key={idx} {...props} />
                                 )
                             })
                         }
@@ -39,4 +38,4 @@ function Music() {
     )
 }
 
-export default Music;
+export default VideoUI;

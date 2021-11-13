@@ -1,8 +1,8 @@
 import React, { useMemo, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { converterApi } from './api';
-import Loader from '../components/loder';
-import { errorMessageAlert, successMessageAlert } from '../components/alert';
+import Loader from '../../components/loder';
+import { errorMessageAlert, successMessageAlert } from '../../components/alert';
 
 const baseStyle = {
     flex: 1,
@@ -33,7 +33,7 @@ const rejectStyle = {
 };
 
 
-function DropzoneArea(props) {
+function VideoDropzoneArea(props) {
     const [imageData, setImageData] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
 
@@ -129,4 +129,4 @@ function DropzoneArea(props) {
     )
 }
 
-export default DropzoneArea;
+export default VideoDropzoneArea;

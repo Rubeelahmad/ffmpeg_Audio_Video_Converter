@@ -82,3 +82,10 @@ export const VideoCompressorType = [
         path: "video-compressor"
     },
 ]
+
+export const Mp4ToMp3 = [
+    {
+        name: "MP4 To MP3",
+        path: "mp4-to-mp3",
+    },
+]

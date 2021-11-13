@@ -1,9 +1,7 @@
 import React, { useMemo, useState } from 'react';
-import { Formik } from 'formik';
 import { useDropzone } from 'react-dropzone';
-// import { converterApi } from './api';
-import Loader from '../components/loder';
-import { errorMessageAlert, successMessageAlert } from '../components/alert';
+import Loader from '../../components/loder';
+import { errorMessageAlert, successMessageAlert } from '../../components//alert';
 import { Card, Col, Form, Row } from 'react-bootstrap';
 
 const baseStyle = {
