@@ -3,6 +3,8 @@ import { useDropzone } from 'react-dropzone';
 import Loader from '../../components/loder';
 import { errorMessageAlert, successMessageAlert } from '../../components//alert';
 import { Card, Col, Form, Row } from 'react-bootstrap';
+import FileSizeInMB from './target-a-file-size-components/file-size-in-mb';
+import FileSizeInPercentage from './target-a-file-size-components/file-size-in-percentage';
 
 const baseStyle = {
     flex: 1,
@@ -41,6 +43,7 @@ function VideoCompressorForm(props) {
     const [isLoaded, setIsLoaded] = useState(false);
     const [videoCodec, setVideoCodec] = useState(videoCodecValues[0]);
     const [compressionMethod, setCompressionMethod] = useState(compressionMethodValues[0]);
+    const [compressionMethodIndex, setCompressionMethodIndex] = useState(0);
 
     const {
         getRootProps,
@@ -145,6 +148,7 @@ function VideoCompressorForm(props) {
                                 <Col xs={8}>
                                     <Form.Select size="sm" onChange={(e) => {
                                         console.log("Compression Method", compressionMethodValues[e.target.value]);
+                                        setCompressionMethodIndex(e.target.value);
                                         setCompressionMethod(compressionMethodValues[e.target.value]);
                                     }}>
                                         {
@@ -166,7 +170,7 @@ function VideoCompressorForm(props) {
                                 </Col>
                             </Row>
 
-                            <Row className="mt-3">
+                            {/* <Row className="mt-3">
                                 <Col xs={4} className="text-end">
                                     <Form.Label>Target Size (MB)</Form.Label>
                                 </Col>
@@ -178,7 +182,10 @@ function VideoCompressorForm(props) {
                                         Enter desired video file size in MB (Megabytes)
                                     </Form.Text>
                                 </Col>
-                            </Row>
+                            </Row> */}
+
+                            {/* <FileSizeInMB /> */}
+                            <FileSizeInPercentage />
 
                             <Row className="mt-3">
                                 <Col xs={4} className="text-end">
