@@ -32,10 +32,15 @@ const rejectStyle = {
     borderColor: '#ff1744'
 };
 
+const videoCodecValues = ["H264", "H265"];
+const compressionMethodValues = ["Target a video resolution", "Target a file size (MB)", "Target a file size (Percentage)", "Target a video quilty", "Target a max bitrate"];
+
 
 function VideoCompressorForm(props) {
     const [imageData, setImageData] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
+    const [videoCodec, setVideoCodec] = useState(videoCodecValues[0]);
+    const [compressionMethod, setCompressionMethod] = useState(compressionMethodValues[0]);
 
     const {
         getRootProps,
@@ -60,6 +65,7 @@ function VideoCompressorForm(props) {
     ]);
 
     const fileHandleChange = async (e) => {
+        console.log("Hellooo::::::::::: ", e.target.files[0])
         const file = e.target.files[0];
         setImageData(file);
     }
@@ -93,8 +99,8 @@ function VideoCompressorForm(props) {
     return (
         <>
             <div className="container">
-                <div {...getRootProps({ style })} onChange={fileHandleChange}>
-                    <input {...getInputProps()} />
+                <div {...getRootProps({ style })}>
+                    <input {...getInputProps()} onChange={fileHandleChange} />
                     <p>Drag 'n' drop some files here, or click to select files</p>
                     <button type="button" className="btn btn-success p-4" onClick={open}>
                         Open File Dialog
@@ -109,65 +115,82 @@ function VideoCompressorForm(props) {
                         <Card.Title className="text-center mb-2 pb-3" style={{ borderBottom: '1px solid gray', fontSize: '20px' }}>
                             Video Quilty & Size
                         </Card.Title>
-                        <Card.Text>
-                            <Form>
-                                <Row className="mt-3">
-                                    <Col xs={4} className="text-end">
-                                        <Form.Label>Video Code</Form.Label>
-                                    </Col>
-                                    <Col xs={8}>
-                                        <Form.Select size="sm">
-                                            <option>H264</option>
-                                            <option>H265</option>
-                                        </Form.Select>
-                                        <Form.Text className="text-muted">
-                                            H265 codec can reduce video size 20-75% more compared to H264 (especially high-resolution video)
-                                        </Form.Text>
-                                    </Col>
-                                </Row>
+                        <Form>
+                            <Row className="mt-3">
+                                <Col xs={4} className="text-end">
+                                    <Form.Label>Video Codec</Form.Label>
+                                </Col>
+                                <Col xs={8}>
+                                    <Form.Select size="sm" onChange={(e) => {
+                                        setVideoCodec(videoCodecValues[e.target.value]);
+                                    }}>
+                                        {
+                                            videoCodecValues.map((value, index) => {
+                                                return <option key={index} value={index}>
+                                                    {value}
+                                                </option>
+                                            })
+                                        }
+                                    </Form.Select>
+                                    <Form.Text className="text-muted">
+                                        H265 codec can reduce video size 20-75% more compared to H264 (especially high-resolution video)
+                                    </Form.Text>
+                                </Col>
+                            </Row>
 
-                                <Row className="mt-3">
-                                    <Col xs={4} className="text-end">
-                                        <Form.Label>Compression Method</Form.Label>
-                                    </Col>
-                                    <Col xs={8}>
-                                        <Form.Select size="sm">
-                                            <option>Target a file size (MB)</option>
-                                            <option>Target a file size (Percentage)</option>
-                                            <option>Target a video quilty</option>
-                                            <option>Target a video resolution</option>
-                                            <option>Target a max bitrate</option>
-                                        </Form.Select>
-                                        <Form.Text className="text-muted">
-                                            Choose "Target a file size" to get an exact output file size. Choose "Target a video quality" when quality is of importance.
-                                        </Form.Text>
-                                    </Col>
-                                </Row>
+                            <Row className="mt-3">
+                                <Col xs={4} className="text-end">
+                                    <Form.Label>Compression Method</Form.Label>
+                                </Col>
+                                <Col xs={8}>
+                                    <Form.Select size="sm" onChange={(e) => {
+                                        console.log("Compression Method", compressionMethodValues[e.target.value]);
+                                        setCompressionMethod(compressionMethodValues[e.target.value]);
+                                    }}>
+                                        {
+                                            compressionMethodValues.map((value, index) => {
+                                                return <option key={index} value={index}>
+                                                    {value}
+                                                </option>
+                                            })
+                                        }
+                                        {/* <option>Target a file size (MB)</option>
+                                        <option>Target a file size (Percentage)</option>
+                                        <option>Target a video quilty</option>
+                                        <option>Target a video resolution</option>
+                                        <option>Target a max bitrate</option> */}
+                                    </Form.Select>
+                                    <Form.Text className="text-muted">
+                                        Choose "Target a file size" to get an exact output file size. Choose "Target a video quality" when quality is of importance.
+                                    </Form.Text>
+                                </Col>
+                            </Row>
 
-                                <Row className="mt-3">
-                                    <Col xs={4} className="text-end">
-                                        <Form.Label>Target Size (MB)</Form.Label>
-                                    </Col>
-                                    <Col xs={8}>
-                                        <Form.Control type="text" size="sm" value="1" />
-                                        <Form.Text className="text-muted">
-                                            Enter desired video file size in MB (Megabytes)
-                                        </Form.Text>
-                                    </Col>
-                                </Row>
+                            <Row className="mt-3">
+                                <Col xs={4} className="text-end">
+                                    <Form.Label>Target Size (MB)</Form.Label>
+                                </Col>
+                                <Col xs={8}>
+                                    <Form.Control type="text" size="sm" value="1" onChange={() => {
+                                        console.log("target size")
+                                    }} />
+                                    <Form.Text className="text-muted">
+                                        Enter desired video file size in MB (Megabytes)
+                                    </Form.Text>
+                                </Col>
+                            </Row>
 
-                                <Row className="mt-3">
-                                    <Col xs={4} className="text-end">
-                                        <Form.Label>Make video compatible with old devices?</Form.Label>
-                                    </Col>
-                                    <Col xs={8}>
-                                        <Form.Check type="checkbox" />
-                                        <Form.Check.Label className="text-muted">Only use this option if you plan to play the video on a really old device or if you are having playback issues (it compress less)</Form.Check.Label>
-                                    </Col>
-                                </Row>
+                            <Row className="mt-3">
+                                <Col xs={4} className="text-end">
+                                    <Form.Label>Make video compatible with old devices?</Form.Label>
+                                </Col>
+                                <Col xs={8}>
+                                    <Form.Check type="checkbox" />
+                                    <Form.Check.Label className="text-muted">Only use this option if you plan to play the video on a really old device or if you are having playback issues (it compress less)</Form.Check.Label>
+                                </Col>
+                            </Row>
 
-                            </Form>
-                        </Card.Text>
+                        </Form>
                     </Card.Body>
                 </Card>
 
