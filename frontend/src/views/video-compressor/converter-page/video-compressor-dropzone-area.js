@@ -5,6 +5,7 @@ import { errorMessageAlert, successMessageAlert } from '../../components//alert'
 import { Card, Col, Form, Row } from 'react-bootstrap';
 import FileSizeInMB from './target-a-file-size-components/file-size-in-mb';
 import FileSizeInPercentage from './target-a-file-size-components/file-size-in-percentage';
+import { compressorApi } from './api';
 
 const baseStyle = {
     flex: 1,
@@ -35,8 +36,8 @@ const rejectStyle = {
 };
 
 const videoCodecValues = ["H264", "H265"];
-const compressionMethodValues = ["Target a video resolution", "Target a file size (MB)", "Target a file size (Percentage)", "Target a video quilty", "Target a max bitrate"];
-
+// const compressionMethodValues = ["Target a video resolution", "Target a file size (MB)", "Target a file size (Percentage)", "Target a video quilty", "Target a max bitrate"];
+const compressionMethodValues = ["Target a file size (MB)", "Target a file size (Percentage)"];
 
 function VideoCompressorForm(props) {
     const [imageData, setImageData] = useState(null);
@@ -44,6 +45,8 @@ function VideoCompressorForm(props) {
     const [videoCodec, setVideoCodec] = useState(videoCodecValues[0]);
     const [compressionMethod, setCompressionMethod] = useState(compressionMethodValues[0]);
     const [compressionMethodIndex, setCompressionMethodIndex] = useState(0);
+    const [sizeInMB, setSizeInMB] = useState(1);
+    const [sizeInPercentage, setSizeInPercentage] = useState(60);
 
     const {
         getRootProps,
@@ -68,7 +71,6 @@ function VideoCompressorForm(props) {
     ]);
 
     const fileHandleChange = async (e) => {
-        console.log("Hellooo::::::::::: ", e.target.files[0])
         const file = e.target.files[0];
         setImageData(file);
     }
@@ -76,11 +78,14 @@ function VideoCompressorForm(props) {
     const handleConvert = async () => {
         setIsLoaded(true);
         const body = {
-            file: imageData
+            videoCodec: videoCodec,
+            compressionMethod: compressionMethod,
+            sizeInMB: sizeInMB,
+            sizeInPercentage: sizeInPercentage
         };
 
         try {
-            const response = 'await converterApi(body, props.converterType)';
+            const response = await compressorApi(body, imageData);
             if (response?.code >= 200 || response?.code < 205) {
                 successMessageAlert(response.message) //Show alert after convert
             } else {
@@ -88,12 +93,40 @@ function VideoCompressorForm(props) {
             }
 
         } catch (error) {
-            console.error("Error::::::::: handle convert function", error);
+            console.error("Error::::::::: handle convert function sddfw", error);
             errorMessageAlert();
         } finally {
             setIsLoaded(false);
         }
     }
+
+    const handleCompressionMethod = (e) => {
+        console.log("Compression Method", compressionMethodValues[e.target.value]);
+        const selectedIndex = e.target.value;
+        setCompressionMethodIndex(selectedIndex);
+        setCompressionMethod(compressionMethodValues[selectedIndex]);
+    }
+
+    const handleTargetSizeInMB = (e) => {
+        const value = e.target.value;
+        if (sizeInMB < 1) {
+            setSizeInMB(1);
+        } else {
+            setSizeInMB(value);
+        }
+    }
+
+    const handleTargetSizeInPercentage = (e) => {
+        const value = e.target.value;
+        if (sizeInPercentage < 1) {
+            setSizeInPercentage(1);
+        } else if (value > 100) {
+            setSizeInPercentage(100);
+        } else {
+            setSizeInPercentage(value)
+        }
+    }
+
 
     if (isLoaded) {
         return <Loader isLoaded={isLoaded} />
@@ -146,11 +179,7 @@ function VideoCompressorForm(props) {
                                     <Form.Label>Compression Method</Form.Label>
                                 </Col>
                                 <Col xs={8}>
-                                    <Form.Select size="sm" onChange={(e) => {
-                                        console.log("Compression Method", compressionMethodValues[e.target.value]);
-                                        setCompressionMethodIndex(e.target.value);
-                                        setCompressionMethod(compressionMethodValues[e.target.value]);
-                                    }}>
+                                    <Form.Select size="sm" onChange={handleCompressionMethod}>
                                         {
                                             compressionMethodValues.map((value, index) => {
                                                 return <option key={index} value={index}>
@@ -158,11 +187,6 @@ function VideoCompressorForm(props) {
                                                 </option>
                                             })
                                         }
-                                        {/* <option>Target a file size (MB)</option>
-                                        <option>Target a file size (Percentage)</option>
-                                        <option>Target a video quilty</option>
-                                        <option>Target a video resolution</option>
-                                        <option>Target a max bitrate</option> */}
                                     </Form.Select>
                                     <Form.Text className="text-muted">
                                         Choose "Target a file size" to get an exact output file size. Choose "Target a video quality" when quality is of importance.
@@ -170,22 +194,10 @@ function VideoCompressorForm(props) {
                                 </Col>
                             </Row>
 
-                            {/* <Row className="mt-3">
-                                <Col xs={4} className="text-end">
-                                    <Form.Label>Target Size (MB)</Form.Label>
-                                </Col>
-                                <Col xs={8}>
-                                    <Form.Control type="text" size="sm" value="1" onChange={() => {
-                                        console.log("target size")
-                                    }} />
-                                    <Form.Text className="text-muted">
-                                        Enter desired video file size in MB (Megabytes)
-                                    </Form.Text>
-                                </Col>
-                            </Row> */}
-
-                            {/* <FileSizeInMB /> */}
-                            <FileSizeInPercentage />
+                            {/* <FileSizeInPercentage /> */}
+                            {
+                                compressionMethodIndex == 0 ? <FileSizeInMB sizeInMB={sizeInMB} handleTargetSizeInMB={handleTargetSizeInMB} /> : compressionMethodIndex == 1 ? <FileSizeInPercentage sizeInPercentage={sizeInPercentage} handleTargetSizeInPercentage={handleTargetSizeInPercentage} /> : ""
+                            }
 
                             <Row className="mt-3">
                                 <Col xs={4} className="text-end">

@@ -193,29 +193,30 @@ exports.audioConverter = async (req, res) => {
 
 exports.videoCompress = async (req, res) => {
     try {
-        const { codec, width, height, videoBitRate, audioBitrate } = req.body;
+        const { videoCodec, sizeInMB, compressionMethod, sizeInPercentage } = req.body;
         var fileOriginalName = req.file.originalname;
         var fileName = `compressed-${fileOriginalName}`;
-        console.log("bodya::::::::::::::::: ", req.body)
+        console.log("bodya::::::::::::::::: ", videoCodec, sizeInMB, compressionMethod, sizeInPercentage)
         // let fileNameWithoutExtension = fileOriginalName.substring(0, fileOriginalName.lastIndexOf('.'));
         // var fileName = `${fileNameWithoutExtension}.${to}`
         ffmpeg(`public/images/${fileOriginalName}`)
             .audioCodec(`copy`)
-            .videoCodec(`libx${codec}`)
-            .withSize(`${width}x${height}`)
+            .videoCodec(`libx${videoCodec}`)
+            .withSize(`680x340`)
+            // .withSize(`${width}x${height}`)
             .withAspectRatio('16:9')
             .withFpsOutput(25)
-            .audioBitrate(`${audioBitrate}`)
-            .videoBitrate(`${videoBitRate}`)
+            // .audioBitrate(`${audioBitrate}`)
+            // .videoBitrate(`${videoBitRate}`)
             .addOptions(['-vprofile high', '-threads 0', '-movflags faststart'])
             // .noVideo()
-        //     .withOutputFormat(to)
+            //     .withOutputFormat(to)
             .noAudio()
             .on("start", function (cmdLine) {
                 console.log("Start.............", cmdLine);
             })
             .on("progress", function (progress) {
-                console.log("Progresss:::::::: ", progress);
+                // console.log("Progresss:::::::: ", progress);
             })
             .on("end", function (stdout, stderr) {
                 /* if (stderr) {

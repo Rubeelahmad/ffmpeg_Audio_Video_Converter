@@ -1,7 +1,7 @@
 import React from "react";
 import { Col, Form, FormControl, InputGroup, Row } from "react-bootstrap";
 
-const FileSizeInPercentage = () => {
+const FileSizeInPercentage = ({ handleTargetSizeInPercentage, sizeInPercentage }) => {
     return (
         <>
             <Row className="mt-3">
@@ -11,16 +11,14 @@ const FileSizeInPercentage = () => {
                 <Col xs={8}>
                     <Row>
                         <Col xs={6}>
-                            <Form.Range type="text" size="sm" min="1" max="100" onChange={(e) => {
-                                console.log("target size", e.target.value)
-                            }} />
+                            <Form.Range type="text" size="sm" min="1" max="100" value={sizeInPercentage} onChange={handleTargetSizeInPercentage} />
                         </Col>
                         <Col xs={6}>
                             <Form.Label htmlFor="inlineFormInputGroup" visuallyHidden>
-                                
+
                             </Form.Label>
                             <InputGroup className="mb-2">
-                                <FormControl id="inlineFormInputGroup" placeholder="File size percentage value" value="25"  />
+                                <Form.Control type="number" min="1" max="100" id="inlineFormInputGroup" placeholder="File size percentage value" value={sizeInPercentage} onChange={handleTargetSizeInPercentage} />
                                 <InputGroup.Text>%</InputGroup.Text>
                             </InputGroup>
                         </Col>

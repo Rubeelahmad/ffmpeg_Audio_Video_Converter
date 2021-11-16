@@ -1,7 +1,7 @@
 import React from "react";
 import { Col, Form, Row } from "react-bootstrap";
 
-const FileSizeInMB = () => {
+const FileSizeInMB = ({ handleTargetSizeInMB, sizeInMB }) => {
     return (
         <>
             <Row className="mt-3">
@@ -9,9 +9,7 @@ const FileSizeInMB = () => {
                     <Form.Label>Target Size (MB)</Form.Label>
                 </Col>
                 <Col xs={8}>
-                    <Form.Control type="text" size="sm" value="1" onChange={() => {
-                        console.log("target size")
-                    }} />
+                    <Form.Control type="number" size="sm" value={sizeInMB} onChange={handleTargetSizeInMB} />
                     <Form.Text className="text-muted">
                         Enter desired video file size in MB (Megabytes)
                     </Form.Text>
