@@ -202,7 +202,7 @@ exports.videoCompress = async (req, res) => {
         ffmpeg(`public/images/${fileOriginalName}`)
             .audioCodec(`copy`)
             .videoCodec(`libx${videoCodec}`)
-            .withSize(`680x340`)
+            .withSize(`3MB`)
             // .withSize(`${width}x${height}`)
             .withAspectRatio('16:9')
             .withFpsOutput(25)
@@ -211,7 +211,7 @@ exports.videoCompress = async (req, res) => {
             .addOptions(['-vprofile high', '-threads 0', '-movflags faststart'])
             // .noVideo()
             //     .withOutputFormat(to)
-            .noAudio()
+            // .noAudio()
             .on("start", function (cmdLine) {
                 console.log("Start.............", cmdLine);
             })

@@ -35,7 +35,7 @@ const rejectStyle = {
     borderColor: '#ff1744'
 };
 
-const videoCodecValues = ["H264", "H265"];
+const videoCodecValues = ["264", "265"];
 // const compressionMethodValues = ["Target a video resolution", "Target a file size (MB)", "Target a file size (Percentage)", "Target a video quilty", "Target a max bitrate"];
 const compressionMethodValues = ["Target a file size (MB)", "Target a file size (Percentage)"];
 
@@ -163,7 +163,7 @@ function VideoCompressorForm(props) {
                                         {
                                             videoCodecValues.map((value, index) => {
                                                 return <option key={index} value={index}>
-                                                    {value}
+                                                    H{value}
                                                 </option>
                                             })
                                         }
