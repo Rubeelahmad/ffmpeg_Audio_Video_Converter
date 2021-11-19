@@ -202,7 +202,7 @@ exports.videoCompress = async (req, res) => {
         ffmpeg(`public/images/${fileOriginalName}`)
             .audioCodec(`copy`)
             .videoCodec(`libx${videoCodec}`)
-            .withSize(`3MB`)
+            .withSize(`50%`)
             // .withSize(`${width}x${height}`)
             .withAspectRatio('16:9')
             .withFpsOutput(25)
