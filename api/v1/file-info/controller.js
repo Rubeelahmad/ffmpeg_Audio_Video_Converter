@@ -28,10 +28,14 @@ exports.getAllFiles = async (req, res) => {
 
 exports.fileUpload = async (req, res) => {
     try {
-        const file_info_res = await fileInfoModel.findAll();
-        console.log("File Upload::::::::::::: ", file_info_res)
+        const { originalname, mimetype } = req.file;
+        const body = {
+            name: originalname,
+            file_type: mimetype
+        }
+        const fileInfoRes = await fileInfoModel.create(body);
         const success_200 = success.success_range_200.success_200;
-        success_200.items = [];
+        success_200.items = fileInfoRes;
         return res.status(success_200.code).send(success_200)
 
     } catch (error) {
@@ -45,19 +49,11 @@ exports.fileUpload = async (req, res) => {
 exports.videoConverter = async (req, res) => {
     try {
         const { to } = req.query;
-        var fileOriginalName = req.file.originalname;
-        let fileNameWithoutExtension = fileOriginalName.substring(0, fileOriginalName.lastIndexOf('.'));
+        const {id, name} = req.body;
+        let fileNameWithoutExtension = name.substring(0, name.lastIndexOf('.'));
         var fileName = `${fileNameWithoutExtension}.${to}`
-        ffmpeg(`public/images/${fileOriginalName}`)
-            // .videoCodec('libx264')
-            // .withSize('640x360')
-            // .videoBitrate('600k')
-            // .withAspectRatio('16:9')
-            // .withFpsOutput(25)
-            // .audioBitrate('90k')
-            // .addOptions(['-vprofile high', '-threads 0', '-movflags faststart'])
+        ffmpeg(`public/images/${name}`)
             .withOutputFormat(to)
-            // .noAudio()
             .on("start", function (cmdLine) {
                 console.log("Start.............", cmdLine);
             })
@@ -83,10 +79,15 @@ exports.videoConverter = async (req, res) => {
                         console.log("File deleted");
                     });
                 }); */
-                fs.unlink(`public/images/${fileOriginalName}`, function (err) {
+                fs.unlink(`public/images/${name}`, function (err) {
                     if (err) throw err;
                     console.log("File deleted");
                 });
+                /* Create a donwload file link */
+
+
+                /* Update db */
+
                 /* Return response */
                 const success_200 = success.success_range_200.success_200;
                 success_200.message = `Video converted successfully into ${to} format`;
@@ -98,7 +99,7 @@ exports.videoConverter = async (req, res) => {
                     if (err) throw err;
                     console.log("File deleted");
                 }); */
-                fs.unlink(`public/images/${fileOriginalName}`, function (err) {
+                fs.unlink(`public/images/${name}`, function (err) {
                     if (err) throw err;
                     console.log("File deleted");
                 });
@@ -120,20 +121,13 @@ exports.videoConverter = async (req, res) => {
 
 exports.audioConverter = async (req, res) => {
     try {
-        const { to } = req.query;
-        var fileOriginalName = req.file.originalname;
-        let fileNameWithoutExtension = fileOriginalName.substring(0, fileOriginalName.lastIndexOf('.'));
+        const to = req.query.to || 'mp3';
+        const {id, name} = req.body;
+        var fileOriginalName = name;
+        let fileNameWithoutExtension = name.substring(0, name.lastIndexOf('.'));
         var fileName = `${fileNameWithoutExtension}.${to}`
-        ffmpeg(`public/images/${fileOriginalName}`)
-            // .videoCodec('libx264')
-            // .withSize('640x360')
-            // .videoBitrate('600k')
-            // .withAspectRatio('16:9')
-            // .withFpsOutput(25)
-            // .audioBitrate('90k')
-            // .addOptions(['-vprofile high', '-threads 0', '-movflags faststart'])
+        ffmpeg(`public/images/${name}`)
             .withOutputFormat(to)
-            // .noAudio()
             .on("start", function (cmdLine) {
                 console.log("Start.............", cmdLine);
             })
@@ -156,7 +150,7 @@ exports.audioConverter = async (req, res) => {
                         console.log("File deleted");
                     });
                 }); */
-                fs.unlink(`public/images/${fileOriginalName}`, function (err) {
+                fs.unlink(`public/images/${name}`, function (err) {
                     if (err) throw err;
                     console.log("File deleted");
                 });
@@ -171,7 +165,7 @@ exports.audioConverter = async (req, res) => {
                     if (err) throw err;
                     console.log("File deleted");
                 }); */
-                fs.unlink(`public/images/${fileOriginalName}`, function (err) {
+                fs.unlink(`public/images/${name}`, function (err) {
                     if (err) throw err;
                     console.log("File deleted");
                 });

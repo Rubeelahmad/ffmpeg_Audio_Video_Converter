@@ -12,7 +12,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     link: {
       type: DataTypes.TEXT,
-      allowNull: false
+      allowNull: true,
+      defaultValue: ''
     },
     file_type: {
       type: DataTypes.TEXT,

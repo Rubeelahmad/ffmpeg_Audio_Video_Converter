@@ -2,41 +2,25 @@ import React from "react";
 import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
+const style={
+    navDropdown: {
+        marginLeft: '50px',
+    }
+}
+
 function NavbarComponent() {
     return (
         <div>
             {/* <Link to='/' className="text-warning m-3">Home</Link>
             <Link to='/converter' className="text-warning m-3">Converter</Link> */}
-            {/* <Navbar>
-                <Container>
-                    <Link to='/' title="Converter">
-                        <Navbar.Brand>
-                            <img
-                                src="/logo/converter-logo.png"
-                                width="30"
-                                height="30"
-                                className="d-inline-block align-top"
-                                alt="React Bootstrap logo"
-                            />
-                        </Navbar.Brand>
-                    </Link>
-                    <NavDropdown title="Dropdown123" id="basic-nav-dropdown">
-                        <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-                        <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
-                        <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-                        <NavDropdown.Divider />
-                        <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
-                    </NavDropdown>
-                </Container>
-            </Navbar> */}
             <Navbar bg="light" expand="lg">
                 <Container>
                     <Link to='/' title="Converter">
-                        <Navbar.Brand>
+                        <Navbar.Brand className="m-3">
                             <img
-                                src="/logo/converter-logo.png"
-                                width="30"
-                                height="30"
+                                src="/logo/small-converter-logo.jpg"
+                                width="200"
+                                height="50"
                                 className="d-inline-block align-top"
                                 alt="React Bootstrap logo"
                             />
@@ -44,19 +28,19 @@ function NavbarComponent() {
                     </Link>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
-                        <Nav className="me-auto">
-                            <NavDropdown title="Converter" id="basic-nav-dropdown">
-                                <NavDropdown.Item>Converter</NavDropdown.Item>
-                                <NavDropdown.Divider />
-                                <NavDropdown.Item href="#action/3.1">Audio</NavDropdown.Item>
-                                <NavDropdown.Item href="#action/3.2">Video</NavDropdown.Item>
-                                <Link to="/mp4-to-mp3"><NavDropdown.Item>MP4 to MP3</NavDropdown.Item></Link>
+                        <Nav className="me-auto m-2">
+                            <NavDropdown style={style.navDropdown} title="Converter" id="basic-nav-dropdown">
+                                {/* <NavDropdown.Item>Converter</NavDropdown.Item> */}
+                                {/* <NavDropdown.Divider /> */}
+                                <NavDropdown.Item as={Link} to="/audio-converter">Audio</NavDropdown.Item>
+                                <NavDropdown.Item as={Link} to="/video-converter">Video</NavDropdown.Item>
+                                <NavDropdown.Item as={Link} to="/mp4-to-mp3">MP4 To MP3</NavDropdown.Item>
 
                             </NavDropdown>
-                            <NavDropdown className="" title="Tools" id="basic-nav-dropdown">
-                                <NavDropdown.Item>Compressor</NavDropdown.Item>
-                                <NavDropdown.Divider />
-                                <NavDropdown.Item href="#action/3.1">Video</NavDropdown.Item>
+                            <NavDropdown style={style.navDropdown} title="Tools" id="basic-nav-dropdown">
+                                {/* <NavDropdown.Item>Compressor</NavDropdown.Item> */}
+                                {/* <NavDropdown.Divider /> */}
+                                <NavDropdown.Item as={Link} to="/video-compressor">Video Compressor</NavDropdown.Item>
 
                             </NavDropdown>
                         </Nav>

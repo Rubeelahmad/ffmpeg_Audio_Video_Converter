@@ -9,17 +9,19 @@ import { ScaleLoader } from "react-spinners";
 
 function Loader(props) {
   return (
-    <div
-      className="sweet-loading"
-      style={{ textAlign: "center", marginTop: "12%" }}
-    >
-      <ScaleLoader
-        // css={override}
-        color={"blue"}
-        height={100}
-        loading={props.isLoaded}
-      />
-    </div>
+    <>
+      <div
+        className="sweet-loading"
+        style={{ textAlign: "center", marginTop: "12%" }}
+      >
+        <ScaleLoader
+          // css={override}
+          color={"blue"}
+          height={100}
+          loading={props.isLoaded}
+        />
+      </div>
+    </>
   );
 }
 

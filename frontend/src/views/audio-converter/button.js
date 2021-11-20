@@ -4,7 +4,7 @@ import { useHistory } from "react-router";
 function AudioConverterButton(props) {
     const history = useHistory();
     const handleClick = (e) => {
-        history.push(`/audio-converter/${e.target.value}`)
+        history.push(`/audio/${e.target.value}`)
     }
     
     return(

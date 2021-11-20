@@ -4,7 +4,7 @@ import { useHistory } from "react-router";
 function VideoConverterButton(props) {
     const history = useHistory();
     const handleClick = (e) => {
-        history.push(`/video-converter/${e.target.value}`)
+        history.push(`/video/${e.target.value}`)
     }
     
     return(
