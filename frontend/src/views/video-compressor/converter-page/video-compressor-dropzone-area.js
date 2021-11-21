@@ -6,6 +6,7 @@ import { Card, Col, Form, Row } from 'react-bootstrap';
 import FileSizeInMB from './target-a-file-size-components/file-size-in-mb';
 import FileSizeInPercentage from './target-a-file-size-components/file-size-in-percentage';
 import { compressorApi } from './api';
+import { fileUploadApi } from '../../../utiles/file-upload-api';
 
 const baseStyle = {
     flex: 1,
@@ -42,6 +43,8 @@ const compressionMethodValues = ["Target a file size (MB)", "Target a file size 
 function VideoCompressorForm(props) {
     const [imageData, setImageData] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
+    const [downloadBtn, setDownloadBtn] = useState(false);
+    const [isFileUploadOrConvert, setIsFileUploadOrConvert] = useState(null);
     const [videoCodec, setVideoCodec] = useState(videoCodecValues[0]);
     const [compressionMethod, setCompressionMethod] = useState(compressionMethodValues[0]);
     const [compressionMethodIndex, setCompressionMethodIndex] = useState(0);
@@ -71,20 +74,54 @@ function VideoCompressorForm(props) {
     ]);
 
     const fileHandleChange = async (e) => {
+        setDownloadBtn(false)
         const file = e.target.files[0];
         setImageData(file);
     }
 
     const handleConvert = async () => {
+        setIsFileUploadOrConvert("File Uploading...");
         setIsLoaded(true);
-        const body = {
-            videoCodec: videoCodec,
-            compressionMethod: compressionMethod,
-            sizeInMB: sizeInMB,
-            sizeInPercentage: sizeInPercentage
-        };
+
+
+        const imagefile = {
+            file: imageData
+        }
 
         try {
+            const fileUploadRes = await fileUploadApi(imagefile);
+            console.log("ID::::::::::: NAme::::::: ", fileUploadRes.items.id, fileUploadRes.items.name);
+            const body = {
+                id: fileUploadRes.items.id,
+                name: fileUploadRes.items.name,
+                videoCodec: videoCodec,
+                compressionMethod: compressionMethod,
+                sizeInMB: sizeInMB,
+                sizeInPercentage: sizeInPercentage
+            };
+            if (fileUploadRes?.code == 200) {
+                setIsFileUploadOrConvert("File Converting...");
+                const convertFileResponse = await compressorApi(body);
+                if (convertFileResponse?.code >= 200 || convertFileResponse?.code < 205) {
+                    setImageData(null);
+                    setDownloadBtn(true);
+                    successMessageAlert(convertFileResponse.message) //Show alert after convert
+                } else {
+                    errorMessageAlert();
+                }
+            } else {
+                errorMessageAlert("File dose not uploaded due to internal error!");
+            }
+
+        } catch (error) {
+            console.error("Error::::::::: handle convert function", error);
+            errorMessageAlert();
+        } finally {
+            setIsLoaded(false);
+            setIsFileUploadOrConvert(null);
+        }
+
+        /* try {
             const response = await compressorApi(body, imageData);
             if (response?.code >= 200 || response?.code < 205) {
                 successMessageAlert(response.message) //Show alert after convert
@@ -97,7 +134,7 @@ function VideoCompressorForm(props) {
             errorMessageAlert();
         } finally {
             setIsLoaded(false);
-        }
+        } */
     }
 
     const handleCompressionMethod = (e) => {
@@ -129,7 +166,14 @@ function VideoCompressorForm(props) {
 
 
     if (isLoaded) {
-        return <Loader isLoaded={isLoaded} />
+        return (
+            <>
+                <div style={{ textAlign: "center" }}>
+                    <h5>{isFileUploadOrConvert}</h5>
+                </div>
+                <Loader isLoaded={isLoaded} />
+            </>
+        )
     }
 
     return (
@@ -219,6 +263,14 @@ function VideoCompressorForm(props) {
                         imageData ? (
                             <button type="button" className="btn btn-info p-3" onClick={handleConvert}>
                                 Convert
+                            </button>
+                        ) : ''
+                    }
+
+                    {
+                        downloadBtn ? (
+                            <button type="button" className="btn btn-info p-3">
+                                Download File
                             </button>
                         ) : ''
                     }

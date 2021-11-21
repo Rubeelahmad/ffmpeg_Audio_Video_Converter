@@ -17,7 +17,7 @@ function AudioUI() {
             <div className="card">
                 <div className="card-header" style={{ cursor: 'pointer' }} title={`${show ? 'hide' : 'show'}`} onClick={handleShow}>
                     <div className="d-flex justify-content-between">
-                        <h4><FontAwesomeIcon icon={faFileAudio} />&nbsp; <span className="text-danger">Music</span> Converter</h4>
+                        <h4><FontAwesomeIcon icon={faFileAudio} />&nbsp; <span className="text-danger">Audio</span> Converter</h4>
                         {
                             show ? (<h4><FontAwesomeIcon icon={faCaretUp} /></h4>) : (<h4><FontAwesomeIcon icon={faCaretDown} /></h4>)
                         }

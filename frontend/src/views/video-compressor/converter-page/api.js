@@ -5,7 +5,7 @@ import { Audios, Videos } from '../../components/converter-file';
 const BASE_API_URL = ENVIRONMENT_VARIABLES.BASE_API_URL;
 
 
-export async function compressorApi(body, file) {
+export async function compressorApi(body) {
     let config = {
         headers: {
             'Content-Type': 'application/json',
@@ -13,14 +13,8 @@ export async function compressorApi(body, file) {
     };
     try {
         let response = {};
-        let formData = new FormData();
-        formData.append("file", file);
-        formData.append("videoCodec", body.videoCodec);
-        formData.append("compressionMethod", body.compressionMethod);
-        formData.append("sizeInMB", body.sizeInMB);
-        formData.append("sizeInPercentage", body.sizeInPercentage);
 
-        response = await API.post(`${BASE_API_URL}file-info/video-compress`, formData, config);
+        response = await API.post(`${BASE_API_URL}file-info/video-compress`, body, config);
         console.log("Data::::::::::::::: resposne::::::::::: ", response.data)
 
         return response?.data;

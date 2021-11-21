@@ -49,7 +49,7 @@ exports.fileUpload = async (req, res) => {
 exports.videoConverter = async (req, res) => {
     try {
         const { to } = req.query;
-        const {id, name} = req.body;
+        const { id, name } = req.body;
         let fileNameWithoutExtension = name.substring(0, name.lastIndexOf('.'));
         var fileName = `${fileNameWithoutExtension}.${to}`
         ffmpeg(`public/images/${name}`)
@@ -122,7 +122,7 @@ exports.videoConverter = async (req, res) => {
 exports.audioConverter = async (req, res) => {
     try {
         const to = req.query.to || 'mp3';
-        const {id, name} = req.body;
+        const { id, name } = req.body;
         var fileOriginalName = name;
         let fileNameWithoutExtension = name.substring(0, name.lastIndexOf('.'));
         var fileName = `${fileNameWithoutExtension}.${to}`
@@ -187,13 +187,10 @@ exports.audioConverter = async (req, res) => {
 
 exports.videoCompress = async (req, res) => {
     try {
-        const { videoCodec, sizeInMB, compressionMethod, sizeInPercentage } = req.body;
-        var fileOriginalName = req.file.originalname;
-        var fileName = `compressed-${fileOriginalName}`;
-        console.log("bodya::::::::::::::::: ", videoCodec, sizeInMB, compressionMethod, sizeInPercentage)
-        // let fileNameWithoutExtension = fileOriginalName.substring(0, fileOriginalName.lastIndexOf('.'));
-        // var fileName = `${fileNameWithoutExtension}.${to}`
-        ffmpeg(`public/images/${fileOriginalName}`)
+        const { id, name, videoCodec, sizeInMB, compressionMethod, sizeInPercentage } = req.body;
+        var fileName = `compressed-${name}`;
+        console.log("bodya::::::::::::::::: ", videoCodec, sizeInMB, compressionMethod, sizeInPercentage, id, name)
+        ffmpeg(`public/images/${name}`)
             .audioCodec(`copy`)
             .videoCodec(`libx${videoCodec}`)
             .withSize(`50%`)
@@ -228,7 +225,7 @@ exports.videoCompress = async (req, res) => {
                         console.log("File deleted");
                     });
                 }); */
-                fs.unlink(`public/images/${fileOriginalName}`, function (err) {
+                fs.unlink(`public/images/${name}`, function (err) {
                     if (err) throw err;
                     console.log("File deleted");
                 });
@@ -243,7 +240,7 @@ exports.videoCompress = async (req, res) => {
                     if (err) throw err;
                     console.log("File deleted");
                 }); */
-                fs.unlink(`public/images/${fileOriginalName}`, function (err) {
+                fs.unlink(`public/images/${name}`, function (err) {
                     if (err) throw err;
                     console.log("File deleted");
                 });
