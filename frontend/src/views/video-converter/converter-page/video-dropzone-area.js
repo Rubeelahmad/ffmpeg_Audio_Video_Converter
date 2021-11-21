@@ -3,7 +3,10 @@ import { useDropzone } from 'react-dropzone';
 import { converterApi } from './api';
 import Loader from '../../components/loder';
 import { errorMessageAlert, successMessageAlert } from '../../components/alert';
-import { fileUploadApi } from '../../../utiles/file-upload-api';
+import { fileRemoveApi, fileUploadApi, removeFile } from '../../../utiles/file-upload-api';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCross, faTimes } from '@fortawesome/free-solid-svg-icons';
+import Button from '@restart/ui/esm/Button';
 
 const baseStyle = {
     flex: 1,
@@ -36,9 +39,15 @@ const rejectStyle = {
 
 function VideoDropzoneArea(props) {
     const [imageData, setImageData] = useState(null);
+    const [uploadBtn, setUploadBtn] = useState(false);
+    const [convertBtn, setConvertBtn] = useState(false);
     const [downloadBtn, setDownloadBtn] = useState(false);
     const [isLoaded, setIsLoaded] = useState(false);
     const [isFileUploadOrConvert, setIsFileUploadOrConvert] = useState(null);
+    const [localFileName, setLocalFileName] = useState(null);
+    const [cloudFileName, setCloudFileName] = useState(null);
+    const [downloadLink, setDownloadLink] = useState(null);
+
 
     const {
         getRootProps,
@@ -62,32 +71,61 @@ function VideoDropzoneArea(props) {
         isDragAccept
     ]);
 
-    const fileHandleChange = async (e) => {
-        setDownloadBtn(false)
-        const file = e.target.files[0];
-        setImageData(file);
+
+    const handleRemoveFile = async () => {
+        const removeFileRes = await removeFile(cloudFileName?.name);
+        if (removeFileRes == true) {
+            setImageData(null);
+            setCloudFileName(null);
+            setLocalFileName(null);
+            setDownloadLink(null);
+            setDownloadBtn(false);
+            setConvertBtn(false);
+            setUploadBtn(false);
+        }
+
     }
 
-    const handleConvert = async () => {
+    const fileHandleChange = async (e) => {
+        let removeFileRes = true;
+        if (downloadBtn == true || convertBtn == true) {
+            /* Remove file from cloud which is uploaded */
+            removeFileRes = false;
+            removeFileRes = await removeFile(cloudFileName?.name);
+        }
+
+        if (removeFileRes) {
+            setDownloadBtn(false);
+            setConvertBtn(false);
+            setUploadBtn(true);
+            const file = e.target.files[0];
+            setLocalFileName(file?.name);
+            setCloudFileName(null);
+            setDownloadLink(null);
+            setImageData(file);
+        }
+
+    }
+
+    const handleUpload = async () => {
         setIsFileUploadOrConvert("File Uploading...");
         setIsLoaded(true);
         const body = {
             file: imageData
         };
-
         try {
             const fileUploadRes = await fileUploadApi(body);
             if (fileUploadRes?.code == 200) {
+                setUploadBtn(false);
+                setConvertBtn(true);
+                setDownloadBtn(false);
+                setCloudFileName(fileUploadRes?.items);
+                setLocalFileName(null);
+                // setFileName(`${file?.name} is ready for convert...`);
                 setIsFileUploadOrConvert("File Converting...");
-                const convertFileResponse = await converterApi(fileUploadRes?.items, props.converterType);
-                if (convertFileResponse?.code >= 200 || convertFileResponse?.code < 205) {
-                    setImageData(null);
-                    setDownloadBtn(true);
-                    successMessageAlert(convertFileResponse.message) //Show alert after convert
-                } else {
-                    errorMessageAlert();
-                }
-            } else{
+                successMessageAlert(`${fileUploadRes?.items?.name} uploaded successfully!`)
+
+            } else {
                 errorMessageAlert("File dose not uploaded due to internal error!");
             }
 
@@ -100,10 +138,38 @@ function VideoDropzoneArea(props) {
         }
     }
 
+    const handleConvert = async () => {
+        setIsFileUploadOrConvert("File Converting...");
+        setIsLoaded(true);
+
+        try {
+            const convertFileResponse = await converterApi(cloudFileName, props.converterType);
+            if (convertFileResponse?.code >= 200 || convertFileResponse?.code < 205) {
+                setImageData(null);
+                setDownloadBtn(true);
+                setUploadBtn(false);
+                setConvertBtn(false);
+                setLocalFileName(null);
+                setCloudFileName(null);
+                setDownloadLink(`Link from backend`);
+
+                successMessageAlert(convertFileResponse.message) //Show alert after convert
+            } else {
+                errorMessageAlert();
+            }
+        } catch (error) {
+            console.error("Error::::::::: handle convert function", error);
+            errorMessageAlert();
+        } finally {
+            setIsLoaded(false);
+            setIsFileUploadOrConvert(null);
+        }
+    }
+
     if (isLoaded) {
         return (
             <>
-                <div style={{textAlign: "center"}}>
+                <div style={{ textAlign: "center" }}>
                     <h5>{isFileUploadOrConvert}</h5>
                 </div>
                 <Loader isLoaded={isLoaded} />
@@ -114,6 +180,20 @@ function VideoDropzoneArea(props) {
     return (
         <>
             <div className="container">
+                <div className="">
+                    {
+                        cloudFileName ? (
+                            <table className="table">
+                                <tbody>
+                                    <tr>
+                                        <th>{cloudFileName?.name}</th>
+                                        <th><FontAwesomeIcon className="text-danger" style={{ fontSize: '24px', cursor: 'pointer' }} title="Remove file" icon={faTimes} onClick={handleRemoveFile} /></th>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        ) : ''
+                    }
+                </div>
                 <div {...getRootProps({ style })}>
                     <input {...getInputProps()} onChange={fileHandleChange} />
                     <p>Drag 'n' drop some files here, or click to select files</p>
@@ -124,7 +204,15 @@ function VideoDropzoneArea(props) {
                 </div>
                 <div className="mt-3 d-flex justify-content-center">
                     {
-                        imageData ? (
+                        uploadBtn ? (
+                            <button type="button" className="btn btn-info p-3" onClick={handleUpload}>
+                                Upload
+                            </button>
+                        ) : ''
+                    }
+
+                    {
+                        convertBtn ? (
                             <button type="button" className="btn btn-info p-3" onClick={handleConvert}>
                                 Convert
                             </button>

@@ -313,3 +313,26 @@ exports.mp4ToMp3 = async (req, res) => {
         return res.status(failure_500.code).send(failure_500);
     }
 }
+
+exports.removeFile = async (req, res) => {
+    try {
+        const { name } = req.body;
+        fs.unlink(`public/images/${name}`, function (err) {
+            if (err) throw err;
+            console.log("File deleted");
+        });
+
+        /* Return response */
+        const success_200 = success.success_range_200.success_200;
+        success_200.message = `Your file ${name} succeefully removed!`;
+        success_200.items = [];
+        return res.status(success_200.code).send(success_200)
+
+
+    } catch (error) {
+        console.log("Error::::::::: ", error);
+        const failure_500 = failure.failure_range_500.failure_500;
+        failure_500.items = error;
+        return res.status(failure_500.code).send(failure_500);
+    }
+}
