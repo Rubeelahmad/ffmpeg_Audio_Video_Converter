@@ -13,7 +13,7 @@ function NavbarComponent() {
         <div>
             {/* <Link to='/' className="text-warning m-3">Home</Link>
             <Link to='/converter' className="text-warning m-3">Converter</Link> */}
-            <Navbar bg="light" expand="lg">
+            <Navbar style={{backgroundColor: 'white'}} expand="lg">
                 <Container>
                     <Link to='/' title="Converter">
                         <Navbar.Brand className="m-3">

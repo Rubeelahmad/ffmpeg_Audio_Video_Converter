@@ -3,10 +3,9 @@ import { useDropzone } from 'react-dropzone';
 import { converterApi } from './api';
 import Loader from '../../components/loder';
 import { errorMessageAlert, successMessageAlert } from '../../components/alert';
-import { fileRemoveApi, fileUploadApi, removeFile } from '../../../utiles/file-upload-api';
+import { fileUploadApi, removeFile } from '../../../utiles/file-upload-api';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCross, faTimes } from '@fortawesome/free-solid-svg-icons';
-import Button from '@restart/ui/esm/Button';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
 const baseStyle = {
     flex: 1,
@@ -18,7 +17,10 @@ const baseStyle = {
     borderRadius: 2,
     borderColor: '#eeeeee',
     borderStyle: 'dashed',
-    backgroundColor: '#fafafa',
+    backgroundColor: '#3c3c3c',
+    backgroundImage: 'linear-gradient(45deg, rgba(0, 0, 0, .06) 25%, transparent 0), linear-gradient(-45deg, rgba(0, 0, 0, .06) 25%, transparent 0), linear-gradient(45deg, transparent 75%, rgba(0, 0, 0, .06) 0), linear-gradient(-45deg, transparent 75%, rgba(0, 0, 0, .06) 0)',
+    backgroundSize: '24px 24px',
+    backgroundPosition: '0 0, 0 12px, 12px -12px, -12px 0',
     color: '#bdbdbd',
     outline: 'none',
     transition: 'border .24s ease-in-out'
@@ -198,7 +200,7 @@ function VideoDropzoneArea(props) {
                     <input {...getInputProps()} onChange={fileHandleChange} />
                     <p>Drag 'n' drop some files here, or click to select files</p>
 
-                    <button type="button" className="btn btn-success p-4" onClick={open}>
+                    <button type="button" className="btn p-3 mt-3" style={{backgroundColor: '#f33', color: 'white'}} onClick={open}>
                         Open File Dialog
                     </button>
                 </div>
