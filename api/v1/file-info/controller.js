@@ -91,7 +91,9 @@ exports.videoConverter = async (req, res) => {
                 /* Return response */
                 const success_200 = success.success_range_200.success_200;
                 success_200.message = `Video converted successfully into ${to} format`;
-                success_200.items = [];
+                success_200.items = {
+                    name: fileName
+                };
                 return res.status(success_200.code).send(success_200)
             }).on("error", function (err) {
                 console.log("an error happened: " + err.message);

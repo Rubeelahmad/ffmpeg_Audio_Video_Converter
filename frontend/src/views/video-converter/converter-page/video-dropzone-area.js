@@ -38,6 +38,13 @@ const rejectStyle = {
     borderColor: '#ff1744'
 };
 
+const styleFile = {
+    btnColor: {
+        backgroundColor: '#f33',
+        color: 'white'
+    }
+}
+
 
 function VideoDropzoneArea(props) {
     const [imageData, setImageData] = useState(null);
@@ -46,9 +53,9 @@ function VideoDropzoneArea(props) {
     const [downloadBtn, setDownloadBtn] = useState(false);
     const [isLoaded, setIsLoaded] = useState(false);
     const [isFileUploadOrConvert, setIsFileUploadOrConvert] = useState(null);
-    const [localFileName, setLocalFileName] = useState(null);
-    const [cloudFileName, setCloudFileName] = useState(null);
     const [downloadLink, setDownloadLink] = useState(null);
+    const [fileNameAny, setFileNameAny] = useState(null);
+    const [fileNameWithId, setFileNameWithId] = useState({});
 
 
     const {
@@ -75,16 +82,26 @@ function VideoDropzoneArea(props) {
 
 
     const handleRemoveFile = async () => {
-        const removeFileRes = await removeFile(cloudFileName?.name);
-        if (removeFileRes == true) {
+        if (convertBtn == true || downloadBtn == true) {
+            const removeFileRes = await removeFile(fileNameAny);
+            if (removeFileRes == true) {
+                setFileNameAny(null);
+                setImageData(null);
+                setDownloadLink(null);
+                setDownloadBtn(false);
+                setConvertBtn(false);
+                setUploadBtn(false);
+            }
+        } else if (uploadBtn == true) {
+            setFileNameAny(null);
             setImageData(null);
-            setCloudFileName(null);
-            setLocalFileName(null);
             setDownloadLink(null);
             setDownloadBtn(false);
             setConvertBtn(false);
             setUploadBtn(false);
         }
+        // const removeFileRes = await removeFile(fileNameAny);
+
 
     }
 
@@ -92,8 +109,8 @@ function VideoDropzoneArea(props) {
         let removeFileRes = true;
         if (downloadBtn == true || convertBtn == true) {
             /* Remove file from cloud which is uploaded */
-            removeFileRes = false;
-            removeFileRes = await removeFile(cloudFileName?.name);
+            // removeFileRes = false;
+            removeFileRes = await removeFile(fileNameAny);
         }
 
         if (removeFileRes) {
@@ -101,8 +118,7 @@ function VideoDropzoneArea(props) {
             setConvertBtn(false);
             setUploadBtn(true);
             const file = e.target.files[0];
-            setLocalFileName(file?.name);
-            setCloudFileName(null);
+            setFileNameAny(file?.name);
             setDownloadLink(null);
             setImageData(file);
         }
@@ -121,10 +137,9 @@ function VideoDropzoneArea(props) {
                 setUploadBtn(false);
                 setConvertBtn(true);
                 setDownloadBtn(false);
-                setCloudFileName(fileUploadRes?.items);
-                setLocalFileName(null);
+                setFileNameAny(fileUploadRes?.items?.name);
+                setFileNameWithId(fileUploadRes?.items);
                 // setFileName(`${file?.name} is ready for convert...`);
-                setIsFileUploadOrConvert("File Converting...");
                 successMessageAlert(`${fileUploadRes?.items?.name} uploaded successfully!`)
 
             } else {
@@ -145,14 +160,13 @@ function VideoDropzoneArea(props) {
         setIsLoaded(true);
 
         try {
-            const convertFileResponse = await converterApi(cloudFileName, props.converterType);
+            const convertFileResponse = await converterApi(fileNameWithId, props.converterType);
             if (convertFileResponse?.code >= 200 || convertFileResponse?.code < 205) {
                 setImageData(null);
                 setDownloadBtn(true);
                 setUploadBtn(false);
                 setConvertBtn(false);
-                setLocalFileName(null);
-                setCloudFileName(null);
+                setFileNameAny(convertFileResponse?.items?.name)
                 setDownloadLink(`Link from backend`);
 
                 successMessageAlert(convertFileResponse.message) //Show alert after convert
@@ -168,7 +182,7 @@ function VideoDropzoneArea(props) {
         }
     }
 
-    if (isLoaded) {
+    /* if (isLoaded) {
         return (
             <>
                 <div style={{ textAlign: "center" }}>
@@ -177,59 +191,70 @@ function VideoDropzoneArea(props) {
                 <Loader isLoaded={isLoaded} />
             </>
         )
-    }
+    } */
 
     return (
         <>
             <div className="container">
                 <div className="">
                     {
-                        cloudFileName ? (
+                        uploadBtn || convertBtn || downloadBtn ? (
                             <table className="table">
                                 <tbody>
                                     <tr>
-                                        <th>{cloudFileName?.name}</th>
+                                        <th>{fileNameAny}</th>
+                                        <th>
+                                            {
+                                                uploadBtn ? (
+                                                    <button type="button" style={styleFile.btnColor} disabled={isLoaded} className="btn" onClick={handleUpload}>
+                                                        Upload
+                                                    </button>
+                                                ) : convertBtn ? (
+                                                    <button type="button" style={styleFile.btnColor} disabled={isLoaded} className="btn" onClick={handleConvert}>
+                                                        Convert
+                                                    </button>
+                                                ) : downloadBtn ? (
+                                                    <button type="button" disabled={isLoaded} style={styleFile.btnColor} className="btn">
+                                                        Download File
+                                                    </button>
+                                                ) : ''
+                                            }
+                                        </th>
                                         <th><FontAwesomeIcon className="text-danger" style={{ fontSize: '24px', cursor: 'pointer' }} title="Remove file" icon={faTimes} onClick={handleRemoveFile} /></th>
                                     </tr>
+
                                 </tbody>
                             </table>
                         ) : ''
                     }
                 </div>
-                <div {...getRootProps({ style })}>
+                {
+                    isLoaded ? (
+                        <>
+                            <div style={{ textAlign: "center" }}>
+                                <h5>{isFileUploadOrConvert}</h5>
+                            </div>
+                            <Loader isLoaded={isLoaded} />
+                        </>
+                    ) : (
+                        <div {...getRootProps({ style })}>
+                            <input {...getInputProps()} onChange={fileHandleChange} />
+                            <p>Drag 'n' drop some files here, or click to select files</p>
+
+                            <button type="button" className="btn p-3 mt-3" style={styleFile.btnColor} onClick={open}>
+                                Open File Dialog
+                            </button>
+                        </div>
+                    )
+                }
+                {/* <div {...getRootProps({ style })}>
                     <input {...getInputProps()} onChange={fileHandleChange} />
                     <p>Drag 'n' drop some files here, or click to select files</p>
 
-                    <button type="button" className="btn p-3 mt-3" style={{backgroundColor: '#f33', color: 'white'}} onClick={open}>
+                    <button type="button" className="btn p-3 mt-3" style={styleFile.btnColor} onClick={open}>
                         Open File Dialog
                     </button>
-                </div>
-                <div className="mt-3 d-flex justify-content-center">
-                    {
-                        uploadBtn ? (
-                            <button type="button" className="btn btn-info p-3" onClick={handleUpload}>
-                                Upload
-                            </button>
-                        ) : ''
-                    }
-
-                    {
-                        convertBtn ? (
-                            <button type="button" className="btn btn-info p-3" onClick={handleConvert}>
-                                Convert
-                            </button>
-                        ) : ''
-                    }
-
-                    {
-                        downloadBtn ? (
-                            <button type="button" className="btn btn-info p-3">
-                                Download File
-                            </button>
-                        ) : ''
-                    }
-
-                </div>
+                </div> */}
             </div>
         </>
     )
