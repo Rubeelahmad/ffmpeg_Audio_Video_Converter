@@ -12,7 +12,7 @@ function Loader(props) {
     <>
       <div
         className="sweet-loading"
-        style={{ textAlign: "center", marginTop: "12%" }}
+        style={{ textAlign: "center", marginTop: "5%" }}
       >
         <ScaleLoader
           // css={override}
