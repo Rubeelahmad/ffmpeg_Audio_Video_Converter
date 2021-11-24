@@ -14,7 +14,7 @@ function VideoConverterUI(props) {
                     <h2 className="lead">Convert your Video to and from <span className="text-uppercase">{converterType}</span>, for free</h2>
                 </div>
                 <div className="mt-5">
-                    <DropzoneArea converterType={converterType} />
+                    <DropzoneArea converterType={converterType} converter="video" />
                 </div>
             </div>
         </>

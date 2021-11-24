@@ -6,7 +6,9 @@ import { Card, Col, Form, Row } from 'react-bootstrap';
 import FileSizeInMB from './target-a-file-size-components/file-size-in-mb';
 import FileSizeInPercentage from './target-a-file-size-components/file-size-in-percentage';
 import { compressorApi } from './api';
-import { fileUploadApi } from '../../../utiles/file-upload-api';
+import { fileUploadApi, removeFile } from '../../../utiles/file-upload-api';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
 const baseStyle = {
     flex: 1,
@@ -39,6 +41,13 @@ const rejectStyle = {
     borderColor: '#ff1744'
 };
 
+const styleFile = {
+    btnColor: {
+        backgroundColor: '#f33',
+        color: 'white'
+    }
+}
+
 const videoCodecValues = ["264", "265"];
 // const compressionMethodValues = ["Target a video resolution", "Target a file size (MB)", "Target a file size (Percentage)", "Target a video quilty", "Target a max bitrate"];
 const compressionMethodValues = ["Target a file size (MB)", "Target a file size (Percentage)"];
@@ -46,13 +55,18 @@ const compressionMethodValues = ["Target a file size (MB)", "Target a file size 
 function VideoCompressorForm(props) {
     const [imageData, setImageData] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
-    const [downloadBtn, setDownloadBtn] = useState(false);
     const [isFileUploadOrConvert, setIsFileUploadOrConvert] = useState(null);
     const [videoCodec, setVideoCodec] = useState(videoCodecValues[0]);
     const [compressionMethod, setCompressionMethod] = useState(compressionMethodValues[0]);
     const [compressionMethodIndex, setCompressionMethodIndex] = useState(0);
     const [sizeInMB, setSizeInMB] = useState(1);
     const [sizeInPercentage, setSizeInPercentage] = useState(60);
+    const [uploadBtn, setUploadBtn] = useState(false);
+    const [convertBtn, setConvertBtn] = useState(false);
+    const [downloadBtn, setDownloadBtn] = useState(false);
+    const [downloadLink, setDownloadLink] = useState(null);
+    const [fileNameAny, setFileNameAny] = useState(null);
+    const [fileNameWithId, setFileNameWithId] = useState({});
 
     const {
         getRootProps,
@@ -76,42 +90,67 @@ function VideoCompressorForm(props) {
         isDragAccept
     ]);
 
-    const fileHandleChange = async (e) => {
-        setDownloadBtn(false)
-        const file = e.target.files[0];
-        setImageData(file);
+    const handleRemoveFile = async () => {
+        if (convertBtn == true || downloadBtn == true) {
+            const removeFileRes = await removeFile(fileNameAny);
+            if (removeFileRes == true) {
+                setFileNameAny(null);
+                setImageData(null);
+                setDownloadLink(null);
+                setDownloadBtn(false);
+                setConvertBtn(false);
+                setUploadBtn(false);
+            }
+        } else if (uploadBtn == true) {
+            setFileNameAny(null);
+            setImageData(null);
+            setDownloadLink(null);
+            setDownloadBtn(false);
+            setConvertBtn(false);
+            setUploadBtn(false);
+        }
+        // const removeFileRes = await removeFile(fileNameAny);
+
+
     }
 
-    const handleConvert = async () => {
-        setIsFileUploadOrConvert("File Uploading...");
-        setIsLoaded(true);
-
-
-        const imagefile = {
-            file: imageData
+    const fileHandleChange = async (e) => {
+        let removeFileRes = true;
+        if (downloadBtn == true || convertBtn == true) {
+            /* Remove file from cloud which is uploaded */
+            // removeFileRes = false;
+            removeFileRes = await removeFile(fileNameAny);
         }
 
+        if (removeFileRes) {
+            setDownloadBtn(false);
+            setConvertBtn(false);
+            setUploadBtn(true);
+            const file = e.target.files[0];
+            setFileNameAny(file?.name);
+            setDownloadLink(null);
+            setImageData(file);
+        }
+
+    }
+
+    const handleUpload = async () => {
+        setIsFileUploadOrConvert("File Uploading...");
+        setIsLoaded(true);
+        const body = {
+            file: imageData
+        };
         try {
-            const fileUploadRes = await fileUploadApi(imagefile);
-            console.log("ID::::::::::: NAme::::::: ", fileUploadRes.items.id, fileUploadRes.items.name);
-            const body = {
-                id: fileUploadRes.items.id,
-                name: fileUploadRes.items.name,
-                videoCodec: videoCodec,
-                compressionMethod: compressionMethod,
-                sizeInMB: sizeInMB,
-                sizeInPercentage: sizeInPercentage
-            };
+            const fileUploadRes = await fileUploadApi(body);
             if (fileUploadRes?.code == 200) {
-                setIsFileUploadOrConvert("File Converting...");
-                const convertFileResponse = await compressorApi(body);
-                if (convertFileResponse?.code >= 200 || convertFileResponse?.code < 205) {
-                    setImageData(null);
-                    setDownloadBtn(true);
-                    successMessageAlert(convertFileResponse.message) //Show alert after convert
-                } else {
-                    errorMessageAlert();
-                }
+                setUploadBtn(false);
+                setConvertBtn(true);
+                setDownloadBtn(false);
+                setFileNameAny(fileUploadRes?.items?.name);
+                setFileNameWithId(fileUploadRes?.items);
+                // setFileName(`${file?.name} is ready for convert...`);
+                successMessageAlert(`${fileUploadRes?.items?.name} uploaded successfully!`)
+
             } else {
                 errorMessageAlert("File dose not uploaded due to internal error!");
             }
@@ -123,21 +162,42 @@ function VideoCompressorForm(props) {
             setIsLoaded(false);
             setIsFileUploadOrConvert(null);
         }
+    }
 
-        /* try {
-            const response = await compressorApi(body, imageData);
-            if (response?.code >= 200 || response?.code < 205) {
-                successMessageAlert(response.message) //Show alert after convert
+    const handleConvert = async () => {
+        setIsFileUploadOrConvert("File Converting...");
+        setIsLoaded(true);
+
+        try {
+            const body = {
+                id: fileNameWithId?.id,
+                name: fileNameWithId?.name,
+                videoCodec: videoCodec,
+                compressionMethod: compressionMethod,
+                sizeInMB: sizeInMB,
+                sizeInPercentage: sizeInPercentage
+            };
+            const convertFileResponse = await compressorApi(body);
+            if (convertFileResponse?.code >= 200 || convertFileResponse?.code < 205) {
+                setImageData(null);
+                setDownloadBtn(true);
+                setUploadBtn(false);
+                setConvertBtn(false);
+                setFileNameAny(convertFileResponse?.items?.name)
+                setDownloadLink(`Link from backend`);
+
+                successMessageAlert(convertFileResponse.message) //Show alert after convert
             } else {
                 errorMessageAlert();
             }
-
         } catch (error) {
-            console.error("Error::::::::: handle convert function sddfw", error);
+            console.error("Error::::::::: handle convert function", error);
             errorMessageAlert();
         } finally {
             setIsLoaded(false);
-        } */
+            setIsFileUploadOrConvert(null);
+        }
+
     }
 
     const handleCompressionMethod = (e) => {
@@ -168,29 +228,63 @@ function VideoCompressorForm(props) {
     }
 
 
-    if (isLoaded) {
-        return (
-            <>
-                <div style={{ textAlign: "center" }}>
-                    <h5>{isFileUploadOrConvert}</h5>
-                </div>
-                <Loader isLoaded={isLoaded} />
-            </>
-        )
-    }
-
     return (
         <>
             <div className="container">
-                <div {...getRootProps({ style })}>
-                    <input {...getInputProps()} onChange={fileHandleChange} />
-                    <p>Drag 'n' drop some files here, or click to select files</p>
-                    <button type="button" className="btn p-3 mt-3" style={{backgroundColor: '#f33', color: 'white'}} onClick={open}>
-                        Open File Dialog
-                    </button>
+                <div className="">
+                    {
+                        uploadBtn || convertBtn || downloadBtn ? (
+                            <table className="table">
+                                <tbody>
+                                    <tr>
+                                        <th>{fileNameAny}</th>
+                                        <th>
+                                            {
+                                                uploadBtn ? (
+                                                    <button type="button" style={styleFile.btnColor} disabled={isLoaded} className="btn" onClick={handleUpload}>
+                                                        Upload
+                                                    </button>
+                                                ) : convertBtn ? (
+                                                    <button type="button" style={styleFile.btnColor} disabled={isLoaded} className="btn" onClick={handleConvert}>
+                                                        Convert
+                                                    </button>
+                                                ) : downloadBtn ? (
+                                                    <button type="button" disabled={isLoaded} style={styleFile.btnColor} className="btn">
+                                                        Download File
+                                                    </button>
+                                                ) : ''
+                                            }
+                                        </th>
+                                        <th><FontAwesomeIcon className="text-danger" style={{ fontSize: '24px', cursor: 'pointer' }} title="Remove file" icon={faTimes} onClick={handleRemoveFile} /></th>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        ) : ''
+                    }
                 </div>
 
-                <Card className="mt-3">
+                {
+                    isLoaded ? (
+                        <>
+                            <div style={{ textAlign: "center" }}>
+                                <h5>{isFileUploadOrConvert}</h5>
+                            </div>
+                            <Loader isLoaded={isLoaded} />
+                        </>
+                    ) : (
+                        <div {...getRootProps({ style })}>
+                            <input {...getInputProps()} onChange={fileHandleChange} />
+                            <p>Drag 'n' drop some files here, or click to select files</p>
+
+                            <button type="button" className="btn p-3 mt-3" style={styleFile.btnColor} onClick={open}>
+                                Open File Dialog
+                            </button>
+                        </div>
+                    )
+                }
+
+                <Card className="mt-3" style={{ display: isLoaded ? "none" : "block", }}>
                     <Card.Header className="display-6">
                         Advanced Setting
                     </Card.Header>
@@ -260,25 +354,6 @@ function VideoCompressorForm(props) {
                     </Card.Body>
                 </Card>
 
-
-                <div className="mt-3 d-flex justify-content-center">
-                    {
-                        imageData ? (
-                            <button type="button" className="btn btn-info p-3" onClick={handleConvert}>
-                                Convert
-                            </button>
-                        ) : ''
-                    }
-
-                    {
-                        downloadBtn ? (
-                            <button type="button" className="btn btn-info p-3">
-                                Download File
-                            </button>
-                        ) : ''
-                    }
-
-                </div>
             </div>
         </>
     )

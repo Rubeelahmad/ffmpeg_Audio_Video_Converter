@@ -1,5 +1,7 @@
 import React from 'react';
 import { useParams } from 'react-router';
+import VideoConverterUI from '../../video-converter/converter-page';
+import VideoDropzoneArea from '../../video-converter/converter-page/video-dropzone-area';
 import AudioDropzoneArea from './audio-dropzone-area';
 // import DropzoneArea from './audio-dropzone-area';
 
@@ -15,7 +17,7 @@ function AudioConverterUI(props) {
                     <h6 className="lead">Convert your file to and from <span className="text-uppercase">{converterType}</span>, for free</h6>
                 </div>
                 <div className="mt-4 mb-4">
-                    <AudioDropzoneArea converterType={converterType} />
+                    <VideoDropzoneArea converterType={converterType} converter="audio" />
                 </div>
             </div>
         </>

@@ -160,7 +160,7 @@ function VideoDropzoneArea(props) {
         setIsLoaded(true);
 
         try {
-            const convertFileResponse = await converterApi(fileNameWithId, props.converterType);
+            const convertFileResponse = await converterApi(fileNameWithId, props.converterType, props.converter);
             if (convertFileResponse?.code >= 200 || convertFileResponse?.code < 205) {
                 setImageData(null);
                 setDownloadBtn(true);
@@ -181,17 +181,6 @@ function VideoDropzoneArea(props) {
             setIsFileUploadOrConvert(null);
         }
     }
-
-    /* if (isLoaded) {
-        return (
-            <>
-                <div style={{ textAlign: "center" }}>
-                    <h5>{isFileUploadOrConvert}</h5>
-                </div>
-                <Loader isLoaded={isLoaded} />
-            </>
-        )
-    } */
 
     return (
         <>
@@ -247,14 +236,6 @@ function VideoDropzoneArea(props) {
                         </div>
                     )
                 }
-                {/* <div {...getRootProps({ style })}>
-                    <input {...getInputProps()} onChange={fileHandleChange} />
-                    <p>Drag 'n' drop some files here, or click to select files</p>
-
-                    <button type="button" className="btn p-3 mt-3" style={styleFile.btnColor} onClick={open}>
-                        Open File Dialog
-                    </button>
-                </div> */}
             </div>
         </>
     )

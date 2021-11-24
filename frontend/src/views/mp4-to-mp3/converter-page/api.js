@@ -13,8 +13,6 @@ export async function converterApi(body) {
     };
     try {
         let response = {};
-        // let formData = new FormData();
-        // formData.append("file", body.file);
 
         response = await API.post(`${BASE_API_URL}file-info/audio-converter`, body, config);
 
