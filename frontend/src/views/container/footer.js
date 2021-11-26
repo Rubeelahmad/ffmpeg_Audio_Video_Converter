@@ -1,24 +1,26 @@
 import React from 'react';
+import './footer.scss';
+
 
 const Footer = () => {
     return (
         <>
-            <footer class="footer">
-                <div class="container">
+            <footer className="footer">
+                <div className="container">
 
-                    <div class="footer-sitemap">
-                        <div class="row">
-                            <div class="col-lg-6">
+                    <div className="footer-sitemap">
+                        <div className="row">
+                            <div className="col-lg-6">
                                 <h6>Converted Files:</h6>
-                                <div class="counter footer-counter">
+                                <div className="counter footer-counter">
                                     <span>1,253,003,953</span>
                                     <span>25,008 TB</span>
                                 </div>
                             </div>
-                            <div class="col-lg-6">
-                                <div class="row">
-                                    <div class="col-12 col-sm">
-                                        <ul class="nav flex-column">
+                            <div className="col-lg-6">
+                                <div className="row">
+                                    <div className="col-12 col-sm">
+                                        <ul className="nav flex-column">
                                             <li><a href="index.html">About</a></li>
                                             <li><a href="../security/index.html">Security</a></li>
                                             <li><a href="../formats/index.html">Formats</a></li>
@@ -26,8 +28,8 @@ const Footer = () => {
                                                 rel="noopener noreferrer">Help</a></li>
                                         </ul>
                                     </div>
-                                    <div class="col-12 col-sm">
-                                        <ul class="nav flex-column">
+                                    <div className="col-12 col-sm">
+                                        <ul className="nav flex-column">
                                             <li><a href="../video-converter/index.html">Video Converter</a></li>
                                             <li><a href="../audio-converter/index.html">Audio Converter</a></li>
                                             <li><a href="../document-converter/index.html">Document Converter</a></li>
@@ -35,8 +37,8 @@ const Footer = () => {
                                             <li><a href="../ocr/index.html">OCR</a></li>
                                         </ul>
                                     </div>
-                                    <div class="col-12 col-sm">
-                                        <ul class="nav flex-column">
+                                    <div className="col-12 col-sm">
+                                        <ul className="nav flex-column">
                                             <li><a href="https://developers.convertio.co/" target="_blank"
                                                 rel="noopener noreferrer">Developers API</a></li>
                                             <li><a href="https://developers.convertio.co/api/docs/" target="_blank"
@@ -53,11 +55,11 @@ const Footer = () => {
                     </div>
 
 
-                    <div class="footer-bottom">
-                        <div class="row align-items-center">
+                    <div className="footer-bottom">
+                        <div className="row align-items-center">
 
-                            <div class="col-md-auto language-select-wrapper">
-                                <select class="language-select" name="language-select">
+                            {/* <div className="col-md-auto language-select-wrapper">
+                                <select className="language-select" name="language-select">
                                     <option>English</option>
                                     <option data-hreflang="id" value="../id/about/index.html">Bahasa Indonesia</option>
                                     <option data-hreflang="de" value="../de/about/index.html">Deutsch</option>
@@ -76,19 +78,19 @@ const Footer = () => {
                                     <option data-hreflang="zh" value="../zh/about/index.html">简体中文</option>
                                     <option data-hreflang="kr" value="../kr/about/index.html">한국어</option>
                                 </select>
-                            </div>
+                            </div> */}
 
-                            <div class="col copyright">
-                                <p>© 2014–2021 Softo ltd. All rights reserved.</p>
+                            <div className="col copyright">
+                                {/* <p>© 2021  All rights reserved.</p> */}
 
 
-                                <ul class="nav">
-                                    <li><a href="../terms/index.html">Terms of Use</a></li>
+                                <ul className="nav">
+                                    <li style={{marginRight: '10px'}}><a href="../terms/index.html">Terms of Use</a></li>
                                     <li><a href="../privacy/index.html">Privacy Policy</a></li>
                                 </ul>
 
 
-                                {/* <p class="logo">
+                                {/* <p className="logo">
                                     <a href="https://softo.co/" aria-label="Go to softo.co company web page">
                                         <svg width="44" height="17">
                                             <use xlink:href="#svg-softo-logo"></use>
@@ -103,9 +105,9 @@ const Footer = () => {
 
                 </div>
 
-                <div class="chrome-app d-none">
+                <div className="chrome-app d-none">
                     <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
-                        <g fill="none" fill-rule="nonzero">
+                        <g fill="none" fillRule="nonzero">
                             <path fill="#4caf50"
                                 d="M50 25c0 13.805-11.195 25-25 25S0 38.805 0 25 11.195 0 25 0s25 11.195 25 25z"></path>
                             <path fill="#ffc107" d="M25 0v25l10 5-11.054 20H25c13.816 0 25-11.184 25-25S38.816 0 25 0z">
@@ -124,38 +126,38 @@ const Footer = () => {
                     <div>
                         <h5>Install Convertio Chrome Extension?</h5>
                         <p>
-                            <button class="btn-cancel">No, thanks</button>
-                            <button class="btn-install">Install</button>
+                            <button className="btn-cancel">No, thanks</button>
+                            <button className="btn-install">Install</button>
                         </p>
                     </div>
                 </div>
 
-                <div class="rate-us d-none">
-                    <span class="close"></span>
-                    <div class="rate">
+                <div className="rate-us d-none">
+                    <span className="close"></span>
+                    <div className="rate">
                         <h5>Rate Conversion Quality!</h5>
-                        {/* <div class="stars" data-score="3">
-                            <i class="star on" title="Hated it">
+                        {/* <div className="stars" data-score="3">
+                            <i className="star on" title="Hated it">
                                 <svg>
                                     <use xlink:href="#svg-icon-star"></use>
                                 </svg>
                             </i>
-                            <i class="star on" title="Disliked it">
+                            <i className="star on" title="Disliked it">
                                 <svg>
                                     <use xlink:href="#svg-icon-star"></use>
                                 </svg>
                             </i>
-                            <i class="star on" title="It was okay">
+                            <i className="star on" title="It was okay">
                                 <svg>
                                     <use xlink:href="#svg-icon-star"></use>
                                 </svg>
                             </i>
-                            <i class="star" title="Liked it">
+                            <i className="star" title="Liked it">
                                 <svg>
                                     <use xlink:href="#svg-icon-star"></use>
                                 </svg>
                             </i>
-                            <i class="star" title="Loved it">
+                            <i className="star" title="Loved it">
                                 <svg>
                                     <use xlink:href="#svg-icon-star"></use>
                                 </svg>
@@ -163,17 +165,17 @@ const Footer = () => {
                         </div> */}
 
                     </div>
-                    <div class="rated d-none">
+                    <div className="rated d-none">
                         <h5>Thank you!</h5>
-                        <p class="text-center">
-                            <button class="btn" data-action="changeScore">Change Score</button>
-                            <button class="btn" data-action="close">Close</button>
+                        <p className="text-center">
+                            <button className="btn" data-action="changeScore">Change Score</button>
+                            <button className="btn" data-action="close">Close</button>
                         </p>
                     </div>
-                    <div class="rated-trust d-none">
+                    <div className="rated-trust d-none">
                         <h5>Thank you!</h5>
                         <p>
-                            <a class="btn" data-action="trustPilot">
+                            <a className="btn" data-action="trustPilot">
                                 Rate Us On <svg width="102" height="31" viewBox="0 0 102 31" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <path

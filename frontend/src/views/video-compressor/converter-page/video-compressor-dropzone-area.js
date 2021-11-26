@@ -165,7 +165,7 @@ function VideoCompressorForm(props) {
     }
 
     const handleConvert = async () => {
-        setIsFileUploadOrConvert("File Converting...");
+        setIsFileUploadOrConvert("File Compressing...");
         setIsLoaded(true);
 
         try {
@@ -246,7 +246,7 @@ function VideoCompressorForm(props) {
                                                     </button>
                                                 ) : convertBtn ? (
                                                     <button type="button" style={styleFile.btnColor} disabled={isLoaded} className="btn" onClick={handleConvert}>
-                                                        Convert
+                                                        Compress
                                                     </button>
                                                 ) : downloadBtn ? (
                                                     <button type="button" disabled={isLoaded} style={styleFile.btnColor} className="btn">
