@@ -4,11 +4,12 @@ dotenv.config();
 
 module.exports = {
   development: {
-    username: process.env.DB_USERNAME,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    host: process.env.HOST,
-    port: process.env.DB_PORT,
+    // username: process.env.DB_USERNAME,
+    username: 'root',
+    password:  'Tkxel4446!',
+    database: 'converter',
+    host: 'localhost', // This might be wrong!!!!
+    port: 3306,
     dialect: 'mysql',
     dialectOptions: {
       supportBigNumbers: true,
