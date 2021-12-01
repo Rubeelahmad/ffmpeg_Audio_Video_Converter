@@ -14,5 +14,5 @@ app.get('/*', function (req, res) {
   res.sendFile(path.join(__dirname, 'frontend/build', 'index.html'));
 
 });
-console.log("Server runs on port: " , port)
+console.log("Server runnning on port: " , port)
 app.listen(port);

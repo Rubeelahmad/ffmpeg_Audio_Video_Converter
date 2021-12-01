@@ -2,13 +2,15 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
+//mysql://b65dabf015757c:1d446d83@us-cdbr-east-04.cleardb.com/heroku_23a93e504397c91?reconnect=true
+
 module.exports = {
   development: {
     // username: process.env.DB_USERNAME,
-    username: 'root',
-    password:  'Tkxel4446!',
-    database: 'converter',
-    host: 'localhost', // This might be wrong!!!!
+    username: 'b65dabf015757c',
+    password:  '1d446d83',
+    database: 'heroku_23a93e504397c91',
+    host: 'us-cdbr-east-04.cleardb.com', 
     port: 3306,
     dialect: 'mysql',
     dialectOptions: {

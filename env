@@ -8,4 +8,4 @@ DB_NAME=converter
 HOST=localhost
 DB_PORT=3306
 
-
+// mysql://b65dabf015757c:1d446d83@us-cdbr-east-04.cleardb.com/heroku_23a93e504397c91?reconnect=true
