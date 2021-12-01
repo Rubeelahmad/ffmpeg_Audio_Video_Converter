@@ -1,4 +1,5 @@
 import React from 'react';
+import { Card } from 'react-bootstrap';
 import VideoCompressorForm from './video-compressor-dropzone-area';
 
 
@@ -14,6 +15,12 @@ function VideoComressorUI(props) {
                 <div className="mt-4 mb-4">
                     <VideoCompressorForm />
                 </div>
+                <Card>
+                    <Card.Header>Ths is Card Header</Card.Header>
+                    <Card.Body>
+                        This is card body
+                    </Card.Body>
+                </Card>
             </div>
         </>
     )

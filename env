@@ -1,0 +1,11 @@
+PORT=3000
+
+NODE_ENV=development
+
+DB_USERNAME=root
+DB_PASSWORD=Tkxel4446!
+DB_NAME=converter
+HOST=localhost
+DB_PORT=3306
+
+

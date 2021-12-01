@@ -6,6 +6,7 @@ import { errorMessageAlert, successMessageAlert } from '../../components/alert';
 import { fileUploadApi, removeFile } from '../../../utiles/file-upload-api';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { Card } from 'react-bootstrap';
 
 const baseStyle = {
     flex: 1,
@@ -236,6 +237,14 @@ function VideoDropzoneArea(props) {
                         </div>
                     )
                 }
+            </div>
+            <div>
+                <Card>
+                    <Card.Header>This is card header1</Card.Header>
+                    <Card.Body>
+                        This is card body 1
+                    </Card.Body>
+                </Card>
             </div>
         </>
     )
