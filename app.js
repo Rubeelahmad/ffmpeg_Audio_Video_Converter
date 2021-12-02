@@ -23,8 +23,6 @@ app.use(cookieParser());
 // app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, '/frontend/build')));
 
-// app.use('/', indexRouter);
-// app.use('/users', usersRouter);
 app.use('/api', api);
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname + '/front-end/build/index.html'));
