@@ -1,4 +1,5 @@
 import React from 'react';
+import { Card } from 'react-bootstrap';
 import { useParams } from 'react-router';
 import DropzoneArea from './video-dropzone-area';
 
