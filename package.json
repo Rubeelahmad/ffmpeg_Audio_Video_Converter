@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node server.js",
+    "start": "node app.js",
     "db:migrate": "sequelize db:migrate",
     "db:migrate:undo:all": "sequelize db:migrate:undo:all",
     "db:migrate:undo": "sequelize db:migrate:undo"
