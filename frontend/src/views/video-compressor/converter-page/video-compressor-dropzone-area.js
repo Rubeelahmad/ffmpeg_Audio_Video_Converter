@@ -142,6 +142,7 @@ function VideoCompressorForm(props) {
         };
         try {
             const fileUploadRes = await fileUploadApi(body);
+            console.log("fileUploadRes?.code::::::: " , fileUploadRes.code)
             if (fileUploadRes?.code == 200) {
                 setUploadBtn(false);
                 setConvertBtn(true);
