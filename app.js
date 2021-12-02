@@ -27,7 +27,7 @@ app.use(express.static(path.join(__dirname, '/frontend/build')));
 // app.use('/users', usersRouter);
 app.use('/api', api);
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname + '/front-end/build/index.html'));
+  res.sendFile(path.join('/front-end/build/index.html'));
 });
 
 // catch 404 and forward to error handler
