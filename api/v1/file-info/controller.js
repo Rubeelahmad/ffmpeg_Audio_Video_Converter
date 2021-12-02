@@ -229,7 +229,7 @@ exports.videoCompress = async (req, res) => {
             .saveToFile(`public/images/${fileName}`);
 
     } catch (error) {
-        console.log("Error::::::::: ", error);
+        console.log("Error1111::::::::: ", error);
         const failure_500 = failure.failure_range_500.failure_500;
         failure_500.items = error;
         return res.status(failure_500.code).send(failure_500);
