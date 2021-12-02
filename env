@@ -1,11 +1,9 @@
-PORT=3000
+PORT=8080
 
 NODE_ENV=development
 
-DB_USERNAME=root
-DB_PASSWORD=Tkxel4446!
-DB_NAME=converter
-HOST=localhost
+DB_USERNAME=b65dabf015757c
+DB_PASSWORD=1d446d83
+DB_NAME=heroku_23a93e504397c91
+HOST=us-cdbr-east-04.cleardb.com
 DB_PORT=3306
-
-// mysql://b65dabf015757c:1d446d83@us-cdbr-east-04.cleardb.com/heroku_23a93e504397c91?reconnect=true

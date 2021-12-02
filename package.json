@@ -1,9 +1,9 @@
 {
-  "name": "ffmpeg-audio-video-converter-backend",
+  "name": "concurrently",
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node app.js",
+    "dev": "concurrently --kill-others \"nodemon app.js\" \"cd frontend/build && npm start\" ",
     "db:migrate": "sequelize db:migrate",
     "db:migrate:undo:all": "sequelize db:migrate:undo:all",
     "db:migrate:undo": "sequelize db:migrate:undo"
@@ -28,5 +28,18 @@
     "nodemon": "^2.0.14",
     "sequelize": "^6.11.0",
     "sequelize-cli": "^6.2.0"
-  }
+  },
+  "main": "app.js",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Rubeelahmad/ffmpeg_Audio_Video_Converter.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Rubeelahmad/ffmpeg_Audio_Video_Converter/issues"
+  },
+  "homepage": "https://github.com/Rubeelahmad/ffmpeg_Audio_Video_Converter#readme",
+  "description": ""
 }
