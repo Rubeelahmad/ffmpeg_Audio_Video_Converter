@@ -273,7 +273,7 @@ function VideoCompressorForm(props) {
                             <Loader isLoaded={isLoaded} />
                         </>
                     ) : (
-                        <div {...getRootProps({ style })}>
+                        <div {...getRootProps({ style })} onChange={fileHandleChange}>
                             <input {...getInputProps()} onChange={fileHandleChange} />
                             <p>Drag 'n' drop some files here, or click to select files</p>
 
