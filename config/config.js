@@ -2,12 +2,12 @@ const dotenv = require('dotenv');
 console.log("dotenv:::" )
 dotenv.config();
 console.log(" after dotenv:::" )
-
+//mysql://b3eb6fa0e12de5:4017e7fe@us-cdbr-east-04.cleardb.com/heroku_ea278d82c03352f?
 module.exports = {
   development: {
-    username: 'b587cc9ba77c33',
-    password:  'c69d9493',
-    database: 'heroku_ab4c024320eb535',
+    username: 'b3eb6fa0e12de5',
+    password:  '4017e7fe',
+    database: 'heroku_ea278d82c03352f',
     host: 'us-cdbr-east-04.cleardb.com', 
     port: 3306,
     dialect: 'mysql',
@@ -16,9 +16,9 @@ module.exports = {
     },
   },
   test: {
-    username: 'b587cc9ba77c33',
-    password:  'c69d9493',
-    database: 'heroku_ab4c024320eb535',
+    username: 'b3eb6fa0e12de5',
+    password:  '4017e7fe',
+    database: 'heroku_ea278d82c03352f',
     host: 'us-cdbr-east-04.cleardb.com', 
     port: 3306,
     dialect: 'mysql',
@@ -27,9 +27,9 @@ module.exports = {
     },
   },
   production: {
-    username: 'b587cc9ba77c33',
-    password:  'c69d9493',
-    database: 'heroku_ab4c024320eb535',
+    username: 'b3eb6fa0e12de5',
+    password:  '4017e7fe',
+    database: 'heroku_ea278d82c03352f',
     host: 'us-cdbr-east-04.cleardb.com', 
     port: 3306,
     dialect: 'mysql',
