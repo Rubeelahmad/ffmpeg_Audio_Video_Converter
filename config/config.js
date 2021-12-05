@@ -1,14 +1,13 @@
 const dotenv = require('dotenv');
-
+console.log("dotenv:::" )
 dotenv.config();
-
-//mysql://b65dabf015757c:1d446d83@us-cdbr-east-04.cleardb.com/heroku_23a93e504397c91?reconnect=true
+console.log(" after dotenv:::" )
 
 module.exports = {
   development: {
-    username: 'b65dabf015757c',
-    password:  '1d446d83',
-    database: 'heroku_23a93e504397c91',
+    username: 'b587cc9ba77c33',
+    password:  'c69d9493',
+    database: 'heroku_ab4c024320eb535',
     host: 'us-cdbr-east-04.cleardb.com', 
     port: 3306,
     dialect: 'mysql',
@@ -17,9 +16,9 @@ module.exports = {
     },
   },
   test: {
-username: 'b65dabf015757c',
-    password:  '1d446d83',
-    database: 'heroku_23a93e504397c91',
+    username: 'b587cc9ba77c33',
+    password:  'c69d9493',
+    database: 'heroku_ab4c024320eb535',
     host: 'us-cdbr-east-04.cleardb.com', 
     port: 3306,
     dialect: 'mysql',
@@ -28,14 +27,14 @@ username: 'b65dabf015757c',
     },
   },
   production: {
-  username: 'b65dabf015757c',
-  password:  '1d446d83',
-  database: 'heroku_23a93e504397c91',
-  host: 'us-cdbr-east-04.cleardb.com', 
-  port: 3306,
-  dialect: 'mysql',
-  dialectOptions: {
-    supportBigNumbers: true,
-  },
+    username: 'b587cc9ba77c33',
+    password:  'c69d9493',
+    database: 'heroku_ab4c024320eb535',
+    host: 'us-cdbr-east-04.cleardb.com', 
+    port: 3306,
+    dialect: 'mysql',
+    dialectOptions: {
+      supportBigNumbers: true,
+    },
  },
 };
