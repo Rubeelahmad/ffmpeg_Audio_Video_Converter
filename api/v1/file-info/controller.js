@@ -28,6 +28,7 @@ exports.getAllFiles = async (req, res) => {
 
 exports.fileUpload = async (req, res) => {
     try {
+        console.log("#####################")
         const { originalname, mimetype } = req.file;
         const body = {
             name: originalname,
