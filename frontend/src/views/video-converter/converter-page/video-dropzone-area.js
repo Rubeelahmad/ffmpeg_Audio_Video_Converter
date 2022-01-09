@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { converterApi } from './api';
+import { converterApi, fileDownload } from './api';
 import Loader from '../../components/loder';
 import { errorMessageAlert, successMessageAlert } from '../../components/alert';
 import { fileUploadApi, removeFile } from '../../../utiles/file-upload-api';
@@ -162,13 +162,14 @@ function VideoDropzoneArea(props) {
 
         try {
             const convertFileResponse = await converterApi(fileNameWithId, props.converterType, props.converter);
+            console.log("CONCNCNCN::::::::::", convertFileResponse)
             if (convertFileResponse?.code >= 200 || convertFileResponse?.code < 205) {
                 setImageData(null);
                 setDownloadBtn(true);
                 setUploadBtn(false);
                 setConvertBtn(false);
                 setFileNameAny(convertFileResponse?.items?.name)
-                setDownloadLink(`Link from backend`);
+                setDownloadLink(convertFileResponse?.items?.name);
 
                 successMessageAlert(convertFileResponse.message) //Show alert after convert
             } else {
@@ -180,6 +181,17 @@ function VideoDropzoneArea(props) {
         } finally {
             setIsLoaded(false);
             setIsFileUploadOrConvert(null);
+        }
+    }
+
+    const handleDownload = async () => {
+        try {
+            const downloadedFile = await fileDownload(downloadLink);
+            console.log("File:::::::::", downloadedFile)
+        } catch (error) {
+            console.error("Error::::::::: handle convert function", error);
+            errorMessageAlert();
+        } finally {
         }
     }
 
@@ -204,7 +216,7 @@ function VideoDropzoneArea(props) {
                                                         Convert
                                                     </button>
                                                 ) : downloadBtn ? (
-                                                    <button type="button" disabled={isLoaded} style={styleFile.btnColor} className="btn">
+                                                    <button type="button" disabled={isLoaded} style={styleFile.btnColor} className="btn" onClick={handleDownload}>
                                                         Download File
                                                     </button>
                                                 ) : ''

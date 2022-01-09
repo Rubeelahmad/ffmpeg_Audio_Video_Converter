@@ -1,3 +1,4 @@
+const path = require("path");
 const failure = require('../../../public/javascripts/failure');
 const success = require('../../../public/javascripts/success');
 // const { createJWT } = require("../../../utils/create-token");
@@ -28,7 +29,6 @@ exports.getAllFiles = async (req, res) => {
 
 exports.fileUpload = async (req, res) => {
     try {
-        console.log("#####################")
         const { originalname, mimetype } = req.file;
         const body = {
             name: originalname,
@@ -93,7 +93,8 @@ exports.videoConverter = async (req, res) => {
                 const success_200 = success.success_range_200.success_200;
                 success_200.message = `Video converted successfully into ${to} format`;
                 success_200.items = {
-                    name: fileName
+                    name: fileName,
+                    link: `./public/images/${fileName}`
                 };
                 return res.status(success_200.code).send(success_200)
             }).on("error", function (err) {
@@ -146,7 +147,8 @@ exports.audioConverter = async (req, res) => {
                 const success_200 = success.success_range_200.success_200;
                 success_200.message = `Video converted successfully into ${to} format`;
                 success_200.items = {
-                    name: fileName
+                    name: fileName,
+                    link: `./public/images/${fileName}`
                 };
                 return res.status(success_200.code).send(success_200)
             }).on("error", function (err) {
@@ -208,7 +210,8 @@ exports.videoCompress = async (req, res) => {
                 const success_200 = success.success_range_200.success_200;
                 success_200.message = `Video compressed successfully`;
                 success_200.items = {
-                    name: fileName
+                    name: fileName,
+                    link: `./public/images/${fileName}`
                 };
                 return res.status(success_200.code).send(success_200)
             }).on("error", function (err) {
@@ -264,7 +267,8 @@ exports.mp4ToMp3 = async (req, res) => {
                 const success_200 = success.success_range_200.success_200;
                 success_200.message = `Video converted successfully into ${to} format`;
                 success_200.items = {
-                    name: fileName
+                    name: fileName,
+                    link: `./public/images/${fileName}`
                 };
                 return res.status(success_200.code).send(success_200)
             }).on("error", function (err) {
@@ -308,6 +312,21 @@ exports.removeFile = async (req, res) => {
         return res.status(success_200.code).send(success_200)
 
 
+    } catch (error) {
+        console.log("Error::::::::: ", error);
+        const failure_500 = failure.failure_range_500.failure_500;
+        failure_500.items = error;
+        return res.status(failure_500.code).send(failure_500);
+    }
+}
+
+exports.download = async (req, res) => {
+    try {
+        const { file_name } = req.query;
+        // window.location.href = `./public/images/${file_name}`;
+        // console.log("Helloas:::::::::::::: ", window.location.href)
+        const file = `./public/images/${file_name}`;
+        return res.download(file); // Set disposition and send it.
     } catch (error) {
         console.log("Error::::::::: ", error);
         const failure_500 = failure.failure_range_500.failure_500;

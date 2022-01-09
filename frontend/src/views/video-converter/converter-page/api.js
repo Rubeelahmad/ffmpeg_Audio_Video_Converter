@@ -48,3 +48,34 @@ export async function converterApi(body, type, converter) {
         throw error;
     }
 }
+
+export async function fileDownload(file_name) {
+    let config = {
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    };
+    try {
+        fetch(`${BASE_API_URL}file-info/download?file_name=${file_name}`)
+            .then(response => response.blob())
+            .then(function (myBlob) {
+                var objectURL = URL.createObjectURL(myBlob);
+                // myImage.src = objectURL;
+                console.log("My Image::::::::::::: ", objectURL)
+                const blob = new Blob([myBlob]);
+                const link = document.createElement('a');
+                console.log("Link:::::::::::: ", link)
+                link.href = window.URL.createObjectURL(blob);
+                console.log("Link:::::::::::: ", link.href)
+                link.download = `${file_name}`;
+                console.log("Link:::::::::::: ", link.download)
+                link.click();
+
+            })
+        // const response = await API.get(`${BASE_API_URL}file-info/download?file_name=${file_name}`, config);
+        // console.log("Res::::::::::::::::::::: ", response.data)
+        // return response;
+    } catch (error) {
+        throw error;
+    }
+}

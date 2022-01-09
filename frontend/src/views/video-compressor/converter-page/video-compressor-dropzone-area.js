@@ -9,6 +9,7 @@ import { compressorApi } from './api';
 import { fileUploadApi, removeFile } from '../../../utiles/file-upload-api';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { fileDownload } from '../../video-converter/converter-page/api';
 
 const baseStyle = {
     flex: 1,
@@ -183,8 +184,8 @@ function VideoCompressorForm(props) {
                 setDownloadBtn(true);
                 setUploadBtn(false);
                 setConvertBtn(false);
-                setFileNameAny(convertFileResponse?.items?.name)
-                setDownloadLink(`Link from backend`);
+                setFileNameAny(convertFileResponse?.items?.name);
+                setDownloadLink(convertFileResponse?.items?.name);
 
                 successMessageAlert(convertFileResponse.message) //Show alert after convert
             } else {
@@ -198,6 +199,17 @@ function VideoCompressorForm(props) {
             setIsFileUploadOrConvert(null);
         }
 
+    }
+
+    const handleDownload = async () => {
+        try {
+            const downloadedFile = await fileDownload(downloadLink);
+            console.log("File:::::::::", downloadedFile)
+        } catch (error) {
+            console.error("Error::::::::: handle convert function", error);
+            errorMessageAlert();
+        } finally {
+        }
     }
 
     const handleCompressionMethod = (e) => {
@@ -249,7 +261,7 @@ function VideoCompressorForm(props) {
                                                         Compress
                                                     </button>
                                                 ) : downloadBtn ? (
-                                                    <button type="button" disabled={isLoaded} style={styleFile.btnColor} className="btn">
+                                                    <button type="button" disabled={isLoaded} style={styleFile.btnColor} className="btn" onClick={handleDownload}>
                                                         Download File
                                                     </button>
                                                 ) : ''
