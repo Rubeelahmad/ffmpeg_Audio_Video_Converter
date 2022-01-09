@@ -14,7 +14,7 @@ export async function compressorApi(body) {
     try {
         let response = {};
 
-        response = await API.post(`${BASE_API_URL}file-info/video-compress`, body, config);
+        response = await API.post(`${BASE_API_URL}/file-info/video-compress`, body, config);
         console.log("Data::::::::::::::: resposne::::::::::: ", response.data)
 
         return response?.data;

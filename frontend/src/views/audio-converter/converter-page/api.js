@@ -19,7 +19,7 @@ export async function converterApi(body, type) {
         const is_audio_converter = _.find(Audios, function (audio) { return audio?.name.toLowerCase() === type.toLowerCase(); });
 
         if (is_audio_converter) {
-            response = await API.post(`${BASE_API_URL}file-info/audio-converter?to=${type}`, body, config);
+            response = await API.post(`${BASE_API_URL}/file-info/audio-converter?to=${type}`, body, config);
         } else {
             console.log("Data::::::::: else:::::");
             const obj = {

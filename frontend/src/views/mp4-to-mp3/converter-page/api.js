@@ -14,7 +14,7 @@ export async function converterApi(body) {
     try {
         let response = {};
 
-        response = await API.post(`${BASE_API_URL}file-info/audio-converter`, body, config);
+        response = await API.post(`${BASE_API_URL}/file-info/audio-converter`, body, config);
 
         return response?.data;
     } catch (error) {

@@ -16,7 +16,7 @@ export async function fileUploadApi(body) {
         let formData = new FormData();
         formData.append("file", body.file);
 
-        response = await API.post(`${BASE_API_URL}file-info/file-upload`, formData, config);
+        response = await API.post(`${BASE_API_URL}/file-info/file-upload`, formData, config);
 
         return response?.data;
     } catch (error) {
@@ -33,7 +33,7 @@ export async function fileRemoveApi(body) {
     try {
         let response = {};
 
-        response = await API.post(`${BASE_API_URL}file-info/remove-file`, body, config);
+        response = await API.post(`${BASE_API_URL}/file-info/remove-file`, body, config);
 
         return response?.data;
     } catch (error) {

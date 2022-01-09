@@ -17,7 +17,7 @@ export async function converterApi(body, type, converter) {
         if (converter.toLowerCase() == "video") {
             const is_video_converter = _.find(Videos, function (video) { return video?.name.toLowerCase() === type.toLowerCase(); });
             if (is_video_converter) {
-                response = await API.post(`${BASE_API_URL}file-info/video-converter?to=${type}`, body, config);
+                response = await API.post(`${BASE_API_URL}/file-info/video-converter?to=${type}`, body, config);
             } else {
                 const obj = {
                     code: 400,
@@ -30,7 +30,7 @@ export async function converterApi(body, type, converter) {
             const is_audio_converter = _.find(Audios, function (audio) { return audio?.name.toLowerCase() === type.toLowerCase(); });
 
             if (is_audio_converter) {
-                response = await API.post(`${BASE_API_URL}file-info/audio-converter?to=${type}`, body, config);
+                response = await API.post(`${BASE_API_URL}/file-info/audio-converter?to=${type}`, body, config);
             } else {
                 const obj = {
                     code: 400,
@@ -40,7 +40,7 @@ export async function converterApi(body, type, converter) {
                 response.data = obj;
             }
         } else if (converter.toLowerCase() == "mp4-to-mp3") {
-            response = await API.post(`${BASE_API_URL}file-info/audio-converter`, body, config);
+            response = await API.post(`${BASE_API_URL}/file-info/audio-converter`, body, config);
         }
 
         return response?.data;
