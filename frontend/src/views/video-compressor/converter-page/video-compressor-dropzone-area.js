@@ -246,32 +246,33 @@ function VideoCompressorForm(props) {
                 <div className="">
                     {
                         uploadBtn || convertBtn || downloadBtn ? (
-                            <table className="table">
-                                <tbody>
-                                    <tr>
-                                        <th>{fileNameAny}</th>
-                                        <th>
-                                            {
-                                                uploadBtn ? (
-                                                    <button type="button" style={styleFile.btnColor} disabled={isLoaded} className="btn" onClick={handleUpload}>
-                                                        Upload
-                                                    </button>
-                                                ) : convertBtn ? (
-                                                    <button type="button" style={styleFile.btnColor} disabled={isLoaded} className="btn" onClick={handleConvert}>
-                                                        Compress
-                                                    </button>
-                                                ) : downloadBtn ? (
-                                                    <button type="button" disabled={isLoaded} style={styleFile.btnColor} className="btn" onClick={handleDownload}>
-                                                        Download File
-                                                    </button>
-                                                ) : ''
-                                            }
-                                        </th>
-                                        <th><FontAwesomeIcon className="text-danger" style={{ fontSize: '24px', cursor: 'pointer' }} title="Remove file" icon={faTimes} onClick={handleRemoveFile} /></th>
-                                    </tr>
-
-                                </tbody>
-                            </table>
+                            <div className='d-flex justify-content-end'>
+                                <div>
+                                    {fileNameAny}
+                                </div>
+                                <div className=''>
+                                    <div>
+                                        {
+                                            uploadBtn ? (
+                                                <button type="button" style={styleFile.btnColor} disabled={isLoaded} className="btn" onClick={handleUpload}>
+                                                    Upload
+                                                </button>
+                                            ) : convertBtn ? (
+                                                <button type="button" style={styleFile.btnColor} disabled={isLoaded} className="btn" onClick={handleConvert}>
+                                                    Compress
+                                                </button>
+                                            ) : downloadBtn ? (
+                                                <button type="button" disabled={isLoaded} style={styleFile.btnColor} className="btn" onClick={handleDownload}>
+                                                    Download File
+                                                </button>
+                                            ) : ''
+                                        }
+                                    </div>
+                                    <div>
+                                        <FontAwesomeIcon className="text-danger" style={{ fontSize: '24px', cursor: 'pointer' }} title="Remove file" icon={faTimes} onClick={handleRemoveFile} />
+                                    </div>
+                                </div>
+                            </div>
                         ) : ''
                     }
                 </div>
