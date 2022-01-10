@@ -16,6 +16,8 @@
     "debug": "~2.6.9",
     "dotenv": "^10.0.0",
     "express": "~4.16.1",
+    "ffmpeg-static": "^4.4.0",
+    "ffprobe-static": "^3.0.0",
     "fluent-ffmpeg": "^2.1.2",
     "fluent-ffmpeg-extended": "^1.5.2",
     "http-errors": "~1.6.3",
@@ -26,7 +28,6 @@
     "multer": "^1.4.3",
     "mysql2": "^2.3.2",
     "nodemon": "^2.0.14",
-    "sequelize": "^6.8.0",
     "sequelize": "^6.11.0",
     "sequelize-cli": "^6.2.0"
   }
