@@ -1,13 +1,8 @@
 const jwt = require("jsonwebtoken");
 const ffmpeg = require("fluent-ffmpeg");
-/* ffmpeg.setFfmpegPath('C:/ffmpeg/bin/ffmpeg.exe');
+ffmpeg.setFfmpegPath('C:/ffmpeg/bin/ffmpeg.exe');
 ffmpeg.setFfprobePath('C:/ffmpeg/bin');
-ffmpeg.setFlvtoolPath('c:/flvtool'); */
-var ffmpegStatic = require('ffmpeg-static');
-var ffprobeStatic = require('ffprobe-static');
-console.log(ffmpegStatic);
-ffmpeg.setFfmpegPath(ffmpegStatic.path);
-ffmpeg.setFfprobePath(ffprobeStatic.path);
+ffmpeg.setFlvtoolPath('c:/flvtool');
 var fs = require('fs')
 const multer = require("multer");
 const failler = require('../public/javascripts/failure')

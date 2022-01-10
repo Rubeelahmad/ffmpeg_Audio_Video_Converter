@@ -4,17 +4,9 @@ const success = require('../../../public/javascripts/success');
 // const { createJWT } = require("../../../utils/create-token");
 const fileInfoValidation = require('./validation');
 const ffmpeg = require("fluent-ffmpeg");
-/* ffmpeg.setFfmpegPath('C:/ffmpeg/bin/ffmpeg.exe');
+ffmpeg.setFfmpegPath('C:/ffmpeg/bin/ffmpeg.exe');
 ffmpeg.setFfprobePath('C:/ffmpeg/bin');
-ffmpeg.setFlvtoolPath('c:/flvtool'); */
-var ffmpegStatic = require('ffmpeg-static');
-var ffprobeStatic = require('ffprobe-static');
-console.log(ffmpegStatic);
-//var ffmpeg = require("fluent-ffmpeg");
-ffmpeg.setFfmpegPath(ffmpegStatic.path);
-ffmpeg.setFfprobePath(ffprobeStatic.path);
-
-/usr/local/bin/ffmpeg
+ffmpeg.setFlvtoolPath('c:/flvtool');
 
 const fs = require('fs')
 const models = require('../../../models');
