@@ -4,9 +4,9 @@ const success = require('../../../public/javascripts/success');
 // const { createJWT } = require("../../../utils/create-token");
 const fileInfoValidation = require('./validation');
 const ffmpeg = require("fluent-ffmpeg");
-ffmpeg.setFfmpegPath('C:/ffmpeg/bin/ffmpeg.exe');
-ffmpeg.setFfprobePath('C:/ffmpeg/bin');
-ffmpeg.setFlvtoolPath('c:/flvtool');
+ffmpeg.setFfmpegPath('/usr/local/bin/ffmpeg');
+ffmpeg.setFfprobePath('/usr/local/bin/ffmpeg');
+//ffmpeg.setFlvtoolPath('/usr/local/bin/ffmpeg');
 
 const fs = require('fs')
 const models = require('../../../models');

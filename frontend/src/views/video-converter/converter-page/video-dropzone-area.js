@@ -242,7 +242,7 @@ function VideoDropzoneArea(props) {
                             <input {...getInputProps()} onChange={fileHandleChange} />
                             <p>Drag 'n' drop some files here, or click to select files</p>
 
-                            <button type="button" className="btn p-3 mt-3" style={styleFile.btnColor} onClick={open}>
+                            <button type="file" className="btn p-3 mt-3" style={styleFile.btnColor} >
                                 Open File Dialog
                             </button>
                         </div>
