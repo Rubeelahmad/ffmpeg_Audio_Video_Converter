@@ -162,7 +162,6 @@ function VideoDropzoneArea(props) {
 
         try {
             const convertFileResponse = await converterApi(fileNameWithId, props.converterType, props.converter);
-            console.log("CONCNCNCN::::::::::", convertFileResponse)
             if (convertFileResponse?.code >= 200 || convertFileResponse?.code < 205) {
                 setImageData(null);
                 setDownloadBtn(true);
