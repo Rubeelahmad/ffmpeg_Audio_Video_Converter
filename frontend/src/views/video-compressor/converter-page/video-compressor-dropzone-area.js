@@ -52,6 +52,7 @@ const styleFile = {
 const videoCodecValues = ["264", "265"];
 // const compressionMethodValues = ["Target a video resolution", "Target a file size (MB)", "Target a file size (Percentage)", "Target a video quilty", "Target a max bitrate"];
 const compressionMethodValues = ["Target a file size (MB)", "Target a file size (Percentage)"];
+const compressionTypeValues = ["MB", "PERCENTAGE"];
 
 function VideoCompressorForm(props) {
     const [imageData, setImageData] = useState(null);
@@ -59,6 +60,7 @@ function VideoCompressorForm(props) {
     const [isFileUploadOrConvert, setIsFileUploadOrConvert] = useState(null);
     const [videoCodec, setVideoCodec] = useState(videoCodecValues[0]);
     const [compressionMethod, setCompressionMethod] = useState(compressionMethodValues[0]);
+    const [compressionType, setCompressionType] = useState(compressionTypeValues[0]);
     const [compressionMethodIndex, setCompressionMethodIndex] = useState(0);
     const [sizeInMB, setSizeInMB] = useState(1);
     const [sizeInPercentage, setSizeInPercentage] = useState(60);
@@ -176,7 +178,8 @@ function VideoCompressorForm(props) {
                 videoCodec: videoCodec,
                 compressionMethod: compressionMethod,
                 sizeInMB: sizeInMB,
-                sizeInPercentage: sizeInPercentage
+                sizeInPercentage: sizeInPercentage,
+                type: compressionType
             };
             const convertFileResponse = await compressorApi(body);
             if (convertFileResponse?.code >= 200 || convertFileResponse?.code < 205) {
@@ -217,6 +220,7 @@ function VideoCompressorForm(props) {
         const selectedIndex = e.target.value;
         setCompressionMethodIndex(selectedIndex);
         setCompressionMethod(compressionMethodValues[selectedIndex]);
+        setCompressionType(compressionTypeValues[selectedIndex])
     }
 
     const handleTargetSizeInMB = (e) => {
@@ -243,34 +247,32 @@ function VideoCompressorForm(props) {
     return (
         <>
             <div className="container">
-                <div className="">
+                <div className="mb-3">
                     {
                         uploadBtn || convertBtn || downloadBtn ? (
-                            <div className='d-flex justify-content-end'>
-                                <div>
+                            <div className='row'>
+                                <div className='col-10'>
                                     {fileNameAny}
                                 </div>
-                                <div className=''>
-                                    <div>
-                                        {
-                                            uploadBtn ? (
-                                                <button type="button" style={styleFile.btnColor} disabled={isLoaded} className="btn" onClick={handleUpload}>
-                                                    Upload
-                                                </button>
-                                            ) : convertBtn ? (
-                                                <button type="button" style={styleFile.btnColor} disabled={isLoaded} className="btn" onClick={handleConvert}>
-                                                    Compress
-                                                </button>
-                                            ) : downloadBtn ? (
-                                                <button type="button" disabled={isLoaded} style={styleFile.btnColor} className="btn" onClick={handleDownload}>
-                                                    Download File
-                                                </button>
-                                            ) : ''
-                                        }
-                                    </div>
-                                    <div>
-                                        <FontAwesomeIcon className="text-danger" style={{ fontSize: '24px', cursor: 'pointer' }} title="Remove file" icon={faTimes} onClick={handleRemoveFile} />
-                                    </div>
+                                <div className='col-1'>
+                                    {
+                                        uploadBtn ? (
+                                            <button type="button" style={styleFile.btnColor} disabled={isLoaded} className="btn" onClick={handleUpload}>
+                                                Upload
+                                            </button>
+                                        ) : convertBtn ? (
+                                            <button type="button" style={styleFile.btnColor} disabled={isLoaded} className="btn" onClick={handleConvert}>
+                                                Compress
+                                            </button>
+                                        ) : downloadBtn ? (
+                                            <button type="button" disabled={isLoaded} style={styleFile.btnColor} className="btn" onClick={handleDownload}>
+                                                Download File
+                                            </button>
+                                        ) : ''
+                                    }
+                                </div>
+                                <div className='col-1'>
+                                    <FontAwesomeIcon className="text-danger" style={{ fontSize: '24px', cursor: 'pointer' }} title="Remove file" icon={faTimes} onClick={handleRemoveFile} />
                                 </div>
                             </div>
                         ) : ''

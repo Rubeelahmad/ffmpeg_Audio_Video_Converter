@@ -4,18 +4,131 @@ const success = require('../../../public/javascripts/success');
 // const { createJWT } = require("../../../utils/create-token");
 const fileInfoValidation = require('./validation');
 const ffmpeg = require("fluent-ffmpeg");
-ffmpeg.setFfmpegPath('/usr/local/bin/ffmpeg');
-ffmpeg.setFfprobePath('/usr/local/bin/ffmpeg');
+ffmpeg.setFfmpegPath('C:/ffmpeg/bin/ffmpeg');
+ffmpeg.setFfprobePath('C:/ffmpeg/bin/ffprobe');
 //ffmpeg.setFlvtoolPath('/usr/local/bin/ffmpeg');
 
 const fs = require('fs')
 const models = require('../../../models');
 const fileInfoModel = models.FileInfo;
 
+
+const compressInMB = ({ id, name, videoCodec, sizeInMB, compressionMethod, sizeInPercentage }, fileName) => {
+    try {
+        ffmpeg(`public/images/${name}`)
+            .audioCodec(`copy`)
+            .videoCodec(`libx${videoCodec}`)
+            .withSize(`50%`)
+            // .withSize(`${width}x${height}`)
+            .withAspectRatio('16:9')
+            .withFpsOutput(25)
+            // .audioBitrate(`${audioBitrate}`)
+            // .videoBitrate(`${videoBitRate}`)
+            .addOptions(['-vprofile high', '-threads 0', '-movflags faststart'])
+            // .noVideo()
+            //     .withOutputFormat(to)
+            // .noAudio()
+            .on("start", function (cmdLine) {
+                console.log("Start.............", cmdLine);
+            })
+            .on("progress", function (progress) {
+                console.log("Progresss:::::::: ", progress);
+            })
+            .on("end", function (stdout, stderr) {
+                fs.unlink(`public/images/${name}`, function (err) {
+                    if (err) throw err;
+                    console.log("File deleted");
+                });
+                /* Return response */
+                const success_200 = success.success_range_200.success_200;
+                success_200.message = `Video compressed successfully`;
+                success_200.items = {
+                    name: fileName,
+                    link: `./public/images/${fileName}`
+                };
+                return success_200;
+            }).on("error", function (err) {
+                console.log("an error happened: " + err.message);
+                /* fs.unlink(`public/images/1. Introduction.mp4`, function (err) {
+                    if (err) throw err;
+                    console.log("File deleted");
+                }); */
+                fs.unlink(`public/images/${name}`, function (err) {
+                    if (err) throw err;
+                    console.log("File deleted");
+                });
+                console.log("Error::::::::: ", err);
+                const failure_500 = failure.failure_range_500.failure_500;
+                failure_500.message = err.message;
+                failure_500.items = err.message;
+                return failure_500;
+            })
+            .saveToFile(`public/images/${fileName}`);
+    } catch (error) {
+        throw error;
+    }
+}
+
+const compressInPercentage = ({ id, name, videoCodec, sizeInMB, compressionMethod, sizeInPercentage }, fileName) => {
+    try {
+        ffmpeg(`public/images/${name}`)
+            .audioCodec(`copy`)
+            .videoCodec(`libx${videoCodec}`)
+            .withSize(`50%`)
+            // .withSize(`${width}x${height}`)
+            .withAspectRatio('16:9')
+            .withFpsOutput(25)
+            // .audioBitrate(`${audioBitrate}`)
+            // .videoBitrate(`${videoBitRate}`)
+            .addOptions(['-vprofile high', '-threads 0', '-movflags faststart'])
+            // .noVideo()
+            //     .withOutputFormat(to)
+            // .noAudio()
+            .on("start", function (cmdLine) {
+                console.log("Start.............", cmdLine);
+            })
+            .on("progress", function (progress) {
+                // console.log("Progresss:::::::: ", progress);
+            })
+            .on("end", function (stdout, stderr) {
+                fs.unlink(`public/images/${name}`, function (err) {
+                    if (err) throw err;
+                    console.log("File deleted");
+                });
+                /* Return response */
+                const success_200 = success.success_range_200.success_200;
+                success_200.message = `Video compressed successfully`;
+                success_200.items = {
+                    name: fileName,
+                    link: `./public/images/${fileName}`
+                };
+                return success_200;
+            }).on("error", function (err) {
+                console.log("an error happened: " + err.message);
+                /* fs.unlink(`public/images/1. Introduction.mp4`, function (err) {
+                    if (err) throw err;
+                    console.log("File deleted");
+                }); */
+                fs.unlink(`public/images/${name}`, function (err) {
+                    if (err) throw err;
+                    console.log("File deleted");
+                });
+                console.log("Error::::::::: ", err);
+                const failure_500 = failure.failure_range_500.failure_500;
+                failure_500.message = err.message;
+                failure_500.items = err.message;
+                return failure_500;
+            })
+            .saveToFile(`public/images/${fileName}`);
+    } catch (error) {
+        throw error;
+    }
+}
+
+
 exports.getAllFiles = async (req, res) => {
     try {
         const file_info_res = await fileInfoModel.findAll();
-        console.log("File::::::::::::: ", file_info_res)
         const success_200 = success.success_range_200.success_200;
         success_200.items = [];
         return res.status(success_200.code).send(success_200)
@@ -180,58 +293,18 @@ exports.audioConverter = async (req, res) => {
 
 exports.videoCompress = async (req, res) => {
     try {
-        const { id, name, videoCodec, sizeInMB, compressionMethod, sizeInPercentage } = req.body;
+        const { type } = req.body;
+        let result;
+        const { name } = req.body;
         var fileName = `compressed-${name}`;
-        console.log("bodya::::::::::::::::: ", videoCodec, sizeInMB, compressionMethod, sizeInPercentage, id, name)
-        ffmpeg(`public/images/${name}`)
-            .audioCodec(`copy`)
-            .videoCodec(`libx${videoCodec}`)
-            .withSize(`50%`)
-            // .withSize(`${width}x${height}`)
-            .withAspectRatio('16:9')
-            .withFpsOutput(25)
-            // .audioBitrate(`${audioBitrate}`)
-            // .videoBitrate(`${videoBitRate}`)
-            .addOptions(['-vprofile high', '-threads 0', '-movflags faststart'])
-            // .noVideo()
-            //     .withOutputFormat(to)
-            // .noAudio()
-            .on("start", function (cmdLine) {
-                console.log("Start.............", cmdLine);
-            })
-            .on("progress", function (progress) {
-                // console.log("Progresss:::::::: ", progress);
-            })
-            .on("end", function (stdout, stderr) {
-                fs.unlink(`public/images/${name}`, function (err) {
-                    if (err) throw err;
-                    console.log("File deleted");
-                });
-                /* Return response */
-                const success_200 = success.success_range_200.success_200;
-                success_200.message = `Video compressed successfully`;
-                success_200.items = {
-                    name: fileName,
-                    link: `./public/images/${fileName}`
-                };
-                return res.status(success_200.code).send(success_200)
-            }).on("error", function (err) {
-                console.log("an error happened: " + err.message);
-                /* fs.unlink(`public/images/1. Introduction.mp4`, function (err) {
-                    if (err) throw err;
-                    console.log("File deleted");
-                }); */
-                fs.unlink(`public/images/${name}`, function (err) {
-                    if (err) throw err;
-                    console.log("File deleted");
-                });
-                console.log("Error::::::::: ", err);
-                const failure_500 = failure.failure_range_500.failure_500;
-                failure_500.message = err.message;
-                failure_500.items = err.message;
-                return res.status(failure_500.code).send(failure_500);
-            })
-            .saveToFile(`public/images/${fileName}`);
+        if (type == "MB") {
+            result = await compressInMB(req.body, fileName);
+        } else if (type == "PERCENTAGE") {
+            console.log("Tye::::::::::::::: else if", type)
+            result = await compressInPercentage(req.body, fileName);
+        }
+
+        return res.status(result.code).send(result)
 
     } catch (error) {
         console.log("Error1111::::::::: ", error);

@@ -197,35 +197,35 @@ function VideoDropzoneArea(props) {
     return (
         <>
             <div className="container">
-                <div className="">
+                <div className="mb-3">
                     {
                         uploadBtn || convertBtn || downloadBtn ? (
-                            <table className="table">
-                                <tbody>
-                                    <tr>
-                                        <th>{fileNameAny}</th>
-                                        <th>
-                                            {
-                                                uploadBtn ? (
-                                                    <button type="button" style={styleFile.btnColor} disabled={isLoaded} className="btn" onClick={handleUpload}>
-                                                        Upload
-                                                    </button>
-                                                ) : convertBtn ? (
-                                                    <button type="button" style={styleFile.btnColor} disabled={isLoaded} className="btn" onClick={handleConvert}>
-                                                        Convert
-                                                    </button>
-                                                ) : downloadBtn ? (
-                                                    <button type="button" disabled={isLoaded} style={styleFile.btnColor} className="btn" onClick={handleDownload}>
-                                                        Download File
-                                                    </button>
-                                                ) : ''
-                                            }
-                                        </th>
-                                        <th><FontAwesomeIcon className="text-danger" style={{ fontSize: '24px', cursor: 'pointer' }} title="Remove file" icon={faTimes} onClick={handleRemoveFile} /></th>
-                                    </tr>
+                            <div className='row'>
+                                <div className='col-10'>
+                                    {fileNameAny}
+                                </div>
+                                <div className='col-1'>
+                                    {
+                                        uploadBtn ? (
+                                            <button type="button" style={styleFile.btnColor} disabled={isLoaded} className="btn" onClick={handleUpload}>
+                                                Upload
+                                            </button>
+                                        ) : convertBtn ? (
+                                            <button type="button" style={styleFile.btnColor} disabled={isLoaded} className="btn" onClick={handleConvert}>
+                                                Convert
+                                            </button>
+                                        ) : downloadBtn ? (
+                                            <button type="button" disabled={isLoaded} style={styleFile.btnColor} className="btn" onClick={handleDownload}>
+                                                Download File
+                                            </button>
+                                        ) : ''
+                                    }
+                                </div>
+                                <div className='col-1'>
+                                    <FontAwesomeIcon className="text-danger" style={{ fontSize: '24px', cursor: 'pointer' }} title="Remove file" icon={faTimes} onClick={handleRemoveFile} />
+                                </div>
+                            </div>
 
-                                </tbody>
-                            </table>
                         ) : ''
                     }
                 </div>
