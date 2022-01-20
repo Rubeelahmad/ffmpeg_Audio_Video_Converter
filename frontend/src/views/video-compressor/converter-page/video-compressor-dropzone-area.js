@@ -207,7 +207,6 @@ function VideoCompressorForm(props) {
     const handleDownload = async () => {
         try {
             const downloadedFile = await fileDownload(downloadLink);
-            console.log("File:::::::::", downloadedFile)
         } catch (error) {
             console.error("Error::::::::: handle convert function", error);
             errorMessageAlert();
